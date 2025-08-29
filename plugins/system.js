@@ -26,9 +26,9 @@ cmd({
     let arch = os.arch();
 
     let msg = `
-🖥️ *SYSTEM INFO*
+ *🧬SYSTEM INFOMATION🧬*
 
-💾 RAM Usage: ${usedMem} MB / ${totalMem} MB
+ 📍 RAM Usage: ${usedMem} MB / ${totalMem} MB
 ⏱️ Uptime: ${hours}h ${minutes}m ${seconds}s
 🖧 Platform: ${platform} (${arch})
 👤 Owner: Pathum Malsara & Sandesh Bhashana
