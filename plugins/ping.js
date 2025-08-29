@@ -1,77 +1,46 @@
 const config = require('../settings');
-const { cmd, commands } = require('../lib/command');
+const { performance } = require("perf_hooks")
+const { cmd } = require('../lib/command')
 
 cmd({
-    pattern: "ping",
-    alias: ["speed","pong"],use: '.ping',
-    desc: "Check bot's response time.",
-    category: "main",
-    react: "⚡",
-    filename: __filename
+  pattern: "ping",
+  desc: "Check bot ping",
+  react: "📡",
+  filename: __filename
 },
-async (conn, mek, m, { from, quoted, sender, reply }) => {
-    try {
-        const start = new Date().getTime();
+async (conn, mek, m) => {
+  let start = performance.now()
 
-        const reactionEmojis = ['🔥', '⚡', '🚀', '💨', '🎯', '🎉', '🌟', '💥', '🕐', '🔹'];
-        const textEmojis = ['💎', '🏆', '⚡️', '🚀', '🎶', '🌠', '🌀', '🔱', '🛡️', '✨'];
+  // Send initial message
+  let loadingMsg = await conn.sendMessage(m.chat, {
+    text: "```[░░░░░░░░░░] 0%```"
+  }, { quoted: mek })
 
-        const reactionEmoji = reactionEmojis[Math.floor(Math.random() * reactionEmojis.length)];
-        let textEmoji = textEmojis[Math.floor(Math.random() * textEmojis.length)];
+  const updateMsg = async (text) => {
+    await conn.sendMessage(m.chat, { text, edit: loadingMsg.key })
+  }
 
-        // Ensure reaction and text emojis are different
-        while (textEmoji === reactionEmoji) {
-            textEmoji = textEmojis[Math.floor(Math.random() * textEmojis.length)];
-        }
+  // Fast progress (200ms each)
+  await new Promise(r => setTimeout(r, 200))
+  await updateMsg("```[██░░░░░░░░] 20%```")
 
-        // Send reaction using conn.sendMessage()
-        await conn.sendMessage(from, {
-            react: { text: textEmoji, key: mek.key }
-        });
+  await new Promise(r => setTimeout(r, 200))
+  await updateMsg("```[████░░░░░░] 40%```")
 
-        const end = new Date().getTime();
-        const responseTime = (end - start) / 1000;
+  await new Promise(r => setTimeout(r, 200))
+  await updateMsg("```[██████░░░░] 60%```")
 
-        const text = `> *LUXALGO-XD SPEED: ${responseTime.toFixed(2)}ms ${reactionEmoji}*`;
+  await new Promise(r => setTimeout(r, 200))
+  await updateMsg("```[████████░░] 80%```")
 
-        await conn.sendMessage(from, {
-            text,
-            contextInfo: {
-                mentionedJid: [sender],
-                forwardingScore: 999,
-                isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363409414874042@newsletter',
-                    newsletterName: "LUXALGO XD",
-                    serverMessageId: 143
-                }
-            }
-        }, { quoted: mek });
+  await new Promise(r => setTimeout(r, 200))
+  await updateMsg("```[██████████] 100%✅```")
 
-    } catch (e) {
-        console.error("Error in ping command:", e);
-        reply(`An error occurred: ${e.message}`);
-    }
-});
+  // Calculate ping
+  let end = performance.now()
+  let ping = (end - start).toFixed(0)
 
-// ping2 
-
-cmd({
-    pattern: "ping2",
-    desc: "Check bot's response time.",
-    category: "main",
-    react: "🍂",
-    filename: __filename
-},
-async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
-    try {
-        const startTime = Date.now()
-        const message = await conn.sendMessage(from, { text: '*PINGING...*' })
-        const endTime = Date.now()
-        const ping = endTime - startTime
-        await conn.sendMessage(from, { text: `*LUXALGO-XD SPEED : ${ping}ms*` }, { quoted: message })
-    } catch (e) {
-        console.log(e)
-        reply(`${e}`)
-    }
+  // Final message
+  await new Promise(r => setTimeout(r, 200))
+  await updateMsg(`*PONG 🏓*\n\n📡 *Response Time:* \`${ping} ms\``)
 })
