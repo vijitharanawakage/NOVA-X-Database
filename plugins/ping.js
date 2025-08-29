@@ -8,42 +8,18 @@ cmd({
   filename: __filename
 },
 async (conn, mek, m) => {
+  // start timer
   let start = performance.now()
 
-  // Send initial message
-  let loadingMsg = await conn.sendMessage(m.chat, {
-    text: "```[░░░░░░░░░░] 0%```"
-  }, { quoted: mek })
+  // send temporary message
+  let sentMsg = await conn.sendMessage(m.chat, { text: "🏓 Pinging..." }, { quoted: mek })
 
-  const updateMsg = async (text) => {
-    await conn.sendMessage(m.chat, {
-      text
-    }, {
-      edit: loadingMsg.key
-    })
-  }
-
-  // Progress bar animation
-  await new Promise(r => setTimeout(r, 200))
-  await updateMsg("```[██░░░░░░░░] 20%```")
-
-  await new Promise(r => setTimeout(r, 200))
-  await updateMsg("```[████░░░░░░] 40%```")
-
-  await new Promise(r => setTimeout(r, 200))
-  await updateMsg("```[██████░░░░] 60%```")
-
-  await new Promise(r => setTimeout(r, 200))
-  await updateMsg("```[████████░░] 80%```")
-
-  await new Promise(r => setTimeout(r, 200))
-  await updateMsg("```[██████████] 100%✅```")
-
-  // Calculate ping
+  // end timer
   let end = performance.now()
   let ping = (end - start).toFixed(0)
 
-  // Final update with ping result
-  await new Promise(r => setTimeout(r, 300))
-  await updateMsg(`*PONG 🏓*\n\n📡 *Response Time:* \`${ping} ms\``)
+  // edit message with ping result
+  await conn.sendMessage(m.chat, { 
+    text: `*PONG 🏓*\n📡 Response Time: \`${ping} ms\`` 
+  }, { quoted: mek })
 })
