@@ -1,4 +1,3 @@
-const config = require('../settings');
 const { performance } = require("perf_hooks")
 const { cmd } = require('../lib/command')
 
@@ -17,10 +16,14 @@ async (conn, mek, m) => {
   }, { quoted: mek })
 
   const updateMsg = async (text) => {
-    await conn.sendMessage(m.chat, { text, edit: loadingMsg.key })
+    await conn.sendMessage(m.chat, {
+      text
+    }, {
+      edit: loadingMsg.key
+    })
   }
 
-  // Fast progress (200ms each)
+  // Progress bar animation
   await new Promise(r => setTimeout(r, 200))
   await updateMsg("```[██░░░░░░░░] 20%```")
 
@@ -40,7 +43,7 @@ async (conn, mek, m) => {
   let end = performance.now()
   let ping = (end - start).toFixed(0)
 
-  // Final message
-  await new Promise(r => setTimeout(r, 200))
+  // Final update with ping result
+  await new Promise(r => setTimeout(r, 300))
   await updateMsg(`*PONG 🏓*\n\n📡 *Response Time:* \`${ping} ms\``)
 })
