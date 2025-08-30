@@ -1,7 +1,7 @@
 const { cmd } = require('../lib/command');
 const os = require("os");
 const config = require('../settings');
-
+const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson, jsonformat} = require('../lib/functions');
 cmd({
     pattern: "alive",
     alias: ["status", "online", "bot"],
