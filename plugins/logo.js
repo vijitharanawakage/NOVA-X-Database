@@ -53,7 +53,7 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
             forwardedNewsletterMessageInfo: fdChannel
         };
         const msgBody = {
-            image: {url:` https://files.catbox.moe/aips9b.jpg`},
+            image: {url:`https://files.catbox.moe/rxaw7o.jpeg`},
             caption: logoMsg,
             contextInfo: contextMsg
         };
