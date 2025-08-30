@@ -55,19 +55,21 @@ cmd({
         const platform = os.platform();
         const arch = os.arch();
 
+        //USER
+        const senderName = m.pushName || "User"
+
         const status = `
-╭───〔 *🤖 ${config.BOT_NAME} 𝐒ᴛᴀᴛᴜ𝐒* 〕───◉
+╭───〔 *🤖 ${config.BOT_NAME} 𝐒ᴛᴀᴛᴜ𝐒* 〕──◉
 │✨ *𝙱𝙾𝚃 𝙸𝚂 𝙰𝙲𝚃𝙸𝚅𝙴 & 𝙾𝙽𝙻𝙸𝙽𝙴..!*
-│
-│🧠 *ＯＷＮＥＲ:* ${config.OWNER_NAME}
-│⚡ *ＶＥＲＳＩＯＮ:* 1.0.0
-│📝 *ＰＲＥＦＩＸ:* [${config.PREFIX}]
-│📳 *ＭＯＤＥ:* [${config.MODE}]
-│💾 *ＲＡＭ:* ${usedMem}MB / ${totalMem}MB
-│🖥️ *ＰＬＡＴＦＯＲＭ* : ${platform} (${arch})
-│⏱️ *ＵＰＴΙＭＥ* : ${hours}ｈ ${minutes}ｍ ${seconds}ｓ
-│
-╰─────────────────────────◉
+│👋Hello ${senderName}, welcome 𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃
+│👨‍💻*OWNER:* ${config.OWNER_NAME}
+│⚡ *VERSION:* 1.0.0
+│📝 *PREFIX:* [${config.PREFIX}]
+│📳 *MODE:* [${config.MODE}]
+│💾 *RAM:* ${usedMem}MB / ${totalMem}MB
+│🖥️ *PLATFORM* : ${platform} (${arch})
+│⏱️ *UPTIME* : ${hours}ｈ ${minutes}ｍ ${seconds}ｓ
+╰─────────────────────◉
 ${config.FOOTER}`;
 
         let buttons = [
