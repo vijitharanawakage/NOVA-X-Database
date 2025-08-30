@@ -44,7 +44,7 @@ cmd({
             `🔽 *REPLY WITH YOUR CHOICE*\n\n` +
             `1. *AUDIO TYPE* 🎵\n` +
             `2. *DOCUMENT TYPE* 📁\n\n` +
-            `*ᴘᴏᴡᴇʀᴇᴅ ʙʏ ɴᴏᴠᴀ-x-ᴍᴅ*"}`;
+            `*ᴘᴏᴡᴇʀᴇᴅ ʙʏ ɴᴏᴠᴀ-x-ᴍᴅ*`;
 
         const sentMsg = await conn.sendMessage(from, { image: { url: image }, caption: info }, { quoted: mek });
         const messageID = sentMsg.key.id;
@@ -81,7 +81,7 @@ cmd({
                     type = { document: { url: downloadUrl }, fileName: `${title}.mp3`, mimetype: "audio/mpeg", caption: title };
                     
                 } else { 
-                    return await reply("❌ Invalid choice! Reply with 1.1 or 1.2.");
+                    return await reply("*❌ Invalid choice! Reply with 1 or 2*");
                 }
 
                 await conn.sendMessage(from, type, { quoted: mek });
