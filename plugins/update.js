@@ -10,7 +10,10 @@ cmd({
   desc: "Download latest repo zip and update bot (skip config files)",
   category: "owner",
   filename: __filename
-}, async (conn, m, msg, { reply }) => {
+}, async (conn, m, msg, { reply, isOwner }) => {
+  // Only allow bot owner to run this command
+  if (!isOwner) return reply("❌ This command is only for the bot owner.");
+
   try {
     const repoOwner = "luxalgo2025"; 
     const repoName = "NOVA-X-Database";        
