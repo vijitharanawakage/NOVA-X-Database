@@ -49,7 +49,7 @@ async (conn, mek, m, { from, q, reply }) => {
     await conn.sendMessage(from, {
       image: { url: result.thumbnail },
       caption: captionHeader,
-      footer: "Powered by Luxalgo XD",
+      footer: "Powered by 𝐍ᴏᴠᴀ-𝐗",
       buttons,
       headerType: 4
     }, { quoted: mek });
@@ -76,9 +76,9 @@ async (conn, mek, m, { args, from, reply }) => {
     const result = await getFBInfo(url);
 
     if (type === "sd") {
-      await conn.sendMessage(from, { video: { url: result.sd }, caption: "> *© Powdered By  𝐍ᴏᴠᴀ-𝐗 *" }, { quoted: mek });
+      await conn.sendMessage(from, { video: { url: result.sd }, caption: "> *© Powdered By  𝐍ᴏᴠᴀ-𝐗*" }, { quoted: mek });
     } else if (type === "hd") {
-      await conn.sendMessage(from, { video: { url: result.hd }, caption: "> *© Powdered By  𝐍ᴏᴠᴀ-𝐗 *" }, { quoted: mek });
+      await conn.sendMessage(from, { video: { url: result.hd }, caption: "> *© Powdered By  𝐍ᴏᴠᴀ-𝐗*" }, { quoted: mek });
     } else if (type === "audio") {
       await conn.sendMessage(from, { audio: { url: result.sd }, mimetype: "audio/mpeg" }, { quoted: mek });
     } else {
