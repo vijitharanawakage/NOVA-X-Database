@@ -67,14 +67,14 @@ cmd({
                 let response;
                 
                 if (userReply === "1") {
-                    msg = await conn.sendMessage(from, { text: "⏳ ＰʀᴏᴄᴇꜱꜱɪɴＧ..." }, { quoted: mek });
+                    
                     response = await dy_scrap.ytmp3(`https://youtube.com/watch?v=${id}`);
                     let downloadUrl = response?.result?.download?.url;
                     if (!downloadUrl) return await reply("❌ Download link not found!");
                     type = { audio: { url: downloadUrl }, mimetype: "audio/mpeg" };
                     
                 } else if (userReply === "2") {
-                    msg = await conn.sendMessage(from, { text: "⏳ ＰʀᴏᴄᴇꜱꜱɪɴＧ..." }, { quoted: mek });
+                   
                     const response = await dy_scrap.ytmp3(`https://youtube.com/watch?v=${id}`);
                     let downloadUrl = response?.result?.download?.url;
                     if (!downloadUrl) return await reply("❌ Download link not found!");
@@ -85,7 +85,7 @@ cmd({
                 }
 
                 await conn.sendMessage(from, type, { quoted: mek });
-                await conn.sendMessage(from, { text: '✅ 𝐌ᴇᴅɪ𝐀 𝐔ᴘʟᴏᴀᴅᴇ𝐃 𝐒ᴜᴄᴄᴇꜱꜱꜰᴜʟʟ𝐘 ✅', edit: msg.key });
+                
 
             } catch (error) {
                 console.error(error);
