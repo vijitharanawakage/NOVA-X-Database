@@ -80,7 +80,12 @@ ${config.FOOTER}`;
         buttonId: ".ping",
         buttonText: { displayText: "⫷ 𝗣𝗜𝗡𝗚 ⫸" },
         type: 1
-    }
+    },
+   {  
+       urlbutton: {
+           displayText: "web site",
+           url: "www.hirutv.lk"
+   }           
 ];
 
       
