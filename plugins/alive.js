@@ -59,7 +59,7 @@ cmd({
         const senderName = m.pushName || "User"
 
         const status = `
-│👋Hello ${senderName}, welcome 𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃
+👋Hello *${senderName},* welcome 𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃
 ╭──────────────◉
 │👨‍💻 *OWNER:* ${config.OWNER_NAME}
 │⚡ *VERSION:* 1.0.0
