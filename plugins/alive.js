@@ -61,13 +61,13 @@ cmd({
         const status = `
 👋 𝙷𝙴𝙻𝙻𝙾𝚆 *${senderName},* 𝚆𝙴𝙻𝙲𝙾𝙼𝙴 𝚃𝙾 𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃 👾
 ╭─────────────────◉
-│👨‍💻 *OWNER:* ${config.OWNER_NAME}
-│⚡ *VERSION:* 1.0.0
-│📝 *PREFIX:* [${config.PREFIX}]
-│📳 *MODE:* [${config.MODE}]
-│💾 *RAM:* ${usedMem}MB / ${totalMem}MB
-│🖥️ *PLATFORM* : ${platform} (${arch})
-│⏱️ *UPTIME* : ${hours}ｈ ${minutes}ｍ ${seconds}ｓ
+│👨‍💻 *Ｏᴡɴᴇʀ:* ${config.OWNER_NAME}
+│⚡ *Ｖᴇʀꜱɪᴏɴ:* 1.0.0
+│📝 *Ｐʀᴇꜰɪx:* [${config.PREFIX}]
+│📳 *Ｍᴏᴅᴇ:* [${config.MODE}]
+│💾 *Ｒᴀᴍ:* ${usedMem}MB / ${totalMem}MB
+│🖥️ *Ｐʟᴀᴛꜰᴏʀᴍ* : ${platform} (${arch})
+│⏱️ *Ｕᴘᴛɪᴍᴇ* : ${hours}ｈ ${minutes}ｍ ${seconds}ｓ
 ╰──────────────────◉
 ${config.FOOTER}`;
 
