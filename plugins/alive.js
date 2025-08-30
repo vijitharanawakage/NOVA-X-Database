@@ -38,7 +38,7 @@ cmd({
         // Pick a random message
         const randomMsg = messages[Math.floor(Math.random() * messages.length)];
 
-        // Send the random quote first
+        // 1️⃣ Send the random message first
         await reply(randomMsg);
 
         // Memory
@@ -65,13 +65,14 @@ cmd({
 │📳 *ＭＯＤＥ:* [${config.MODE}]
 │💾 *ＲＡＭ:* ${usedMem}MB / ${totalMem}MB
 │🖥️ *ＰＬＡＴＦＯＲＭ* : ${platform} (${arch})
-│⏱️ *ＵＰＴＩＭＥ* : ${hours}ｈ ${minutes}ｍ ${seconds}ｓ
+│⏱️ *ＵＰＴΙＭＥ* : ${hours}ｈ ${minutes}ｍ ${seconds}ｓ
 │
 ╰─────────────────────────◉
 ${config.FOOTER}`;
 
+        // 2️⃣ Send image + status in separate message
         await conn.sendMessage(from, {
-            image: { url: "https://files.catbox.moe/er0vnl.png" }, // Updated image
+            image: { url: "https://files.catbox.moe/er0vnl.png" },
             caption: status,
             contextInfo: {
                 mentionedJid: [sender],
