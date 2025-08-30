@@ -1,6 +1,6 @@
 const { cmd } = require('../lib/command');
 const os = require("os");
-const config = require('../config');
+const config = require('../settings');
 
 cmd({
     pattern: "alive",
