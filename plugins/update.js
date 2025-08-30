@@ -12,7 +12,7 @@ cmd({
   filename: __filename
 }, async (conn, m, msg, { reply, isOwner }) => {
   // Only allow bot owner to run this command
-  if (!isOwner) return reply("❌ This command is only for the bot owner.");
+  if (!isOwner) return reply("*❌ This command is only for the bot owner.*");
 
   try {
     const repoOwner = "luxalgo2025"; 
