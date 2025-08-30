@@ -27,7 +27,7 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
 ┃ *8.❯* Neon Light
 ┃ *9.❯* Free Bear
 ┃ *10.❯* Devil Wings
-┃ *11.❯8 Futuristic Technology
+┃ *11.❯* Futuristic Technology
 ┃ *12.❯* Silver 3D
 ┃ *13.❯* 3D Paper Cut
 ┃ *14.❯* Pubg 1
