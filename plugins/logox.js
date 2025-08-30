@@ -40,20 +40,11 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
 ╰━━━━━━━━━━━━━━━➤
 
 > ᴘᴏᴡᴇʀᴇᴅ ʙʏ ɴᴏᴠᴀ-x-ᴍᴅ`
-
-       let buttons = [
-                {
-        buttonId: "1",
-        buttonText: { displayText: "❭❭ 𝙾𝚆𝙽𝙴𝚁 ✗" },
-        type: 1
-    },
-    {
-        buttonId: "2",
-        buttonText: { displayText: "❭❭ 𝙿𝙸𝙽𝙶 ✗" },
-        type: 1
-    }
-];
-
+  
+   let buttons = [
+  { buttonId: "logo1", buttonText: { displayText: "🖼 Logo 1" }, type: 1 },
+  { buttonId: "logo2", buttonText: { displayText: "🔥 Logo 2" }, type: 1 }
+]
         const fdChannel = {
             newsletterJid: "120363409414874042@newsletter",
             newsletterName: "𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃",
@@ -67,7 +58,7 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
         };
         const msgBody = {
             buttons,
-            headerType: 1,
+            headerType: 4,
             viewOnce: true,
             image: {url:`https://files.catbox.moe/rxaw7o.jpeg`},
             caption: logoMsg,
@@ -83,6 +74,27 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
 
             const selectedOption = msg.message.extendedTextMessage.text.trim();
 
+           //////// response handle
+if (mek.message?.buttonsResponseMessage) {
+    let id = mek.message.buttonsResponseMessage.selectedButtonId
+        if (id === "logo1") {
+        let data1 = await fetchJson(`${apilink2}/api/logo?url=${logo1}&name=${q}`)
+        await conn.sendMessage(from, {
+          image: { url: data1.result.download_url },
+          caption: caption
+        }, { quoted: mek })
+    }
+
+    if (id === "logo2") {
+        let data2 = await fetchJson(`${apilink2}/api/logo?url=${logo2}&name=${q}`)
+        await conn.sendMessage(from, {
+          image: { url: data2.result.download_url },
+          caption: caption
+        }, { quoted: mek })
+    }
+}
+            //////////////////////
+    
             if (msg.message.extendedTextMessage.contextInfo && msg.message.extendedTextMessage.contextInfo.stanzaId === send.key.id) {
                 switch (selectedOption) {
                     case '1':
