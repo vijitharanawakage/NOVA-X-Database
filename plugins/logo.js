@@ -17,26 +17,26 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
 
 *🔢 Reply Below Number :*
 
- 1 || Black Pink
- 2 || Black Pink 2
- 3 || Black Pink 3
- 4 || Naruto
- 5 || Digital Glitch
- 6 || Pixel Glitch
- 7 || Comic Style
- 8 || Neon Light
- 9 || Free Bear
-10 || Devil Wings
-11 || Futuristic Technology
-12 || Silver 3D
-13 || 3D Paper Cut
-14 || Pubg 1
-15 || Pubg 2
-16 || Free Fire Cover
-17 || Text On Wet Glass
-18 || Typography
-19 || Modern Gold
-20 || Matrix
+ 1. Black Pink
+ 2. Black Pink 2
+ 3. Black Pink 3
+ 4. Naruto
+ 5. Digital Glitch
+ 6. Pixel Glitch
+ 7. Comic Style
+ 8. Neon Light
+ 9. Free Bear
+10. Devil Wings
+11. Futuristic Technology
+12. Silver 3D
+13.3D Paper Cut
+14. Pubg 1
+15. Pubg 2
+16. Free Fire Cover
+17.Text On Wet Glass
+18. Typography
+19. Modern Gold
+20. Matrix
 
 
 > ᴘᴏᴡᴇʀᴇᴅ ʙʏ ɴᴏᴠᴀ-x-ᴍᴅ`
