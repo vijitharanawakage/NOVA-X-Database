@@ -26,12 +26,12 @@ cmd({
     let arch = os.arch();
 
     let msg = `
- *🧬SYSTEM INFOMATION🧬*
+ *👾 𝐍ᴏᴠᴀ-𝐗 𝐒ʏꜱᴛᴇ𝐌 𝐈ɴꜰ𝐎 👾*
 
- 📍 RAM Usage: ${usedMem} MB / ${totalMem} MB
-⏱️ Uptime: ${hours}h ${minutes}m ${seconds}s
-🖧 Platform: ${platform} (${arch})
-👤 Owner: Pathum Malsara & Sandesh Bhashana
+📈 𝚁𝙰𝙼 𝚄𝚂𝙰𝙶𝙴: ${usedMem} ＭＢ / ${totalMem} ＭＢ
+⏱️ 𝚄𝙿𝚃𝙸𝙼𝙴: ${hours}ｈ ${minutes}ｍ ${seconds}ｓ
+🖥️ 𝙿𝙻𝙰𝚃𝙵𝙾𝚁𝙼: ${platform} (${arch})
+👤 𝙾𝚆𝙽𝙴𝚁: Ｐᴇᴛʜᴜᴍ Ｍᴀʟꜱᴀʀᴀ & Ｓᴀɴᴅᴇꜱʜ Ｂʜᴀꜱʜᴀɴᴀ
 `;
 
     // Send system info
