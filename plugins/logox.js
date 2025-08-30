@@ -79,16 +79,13 @@ if (mek.message?.buttonsResponseMessage) {
     let id = mek.message.buttonsResponseMessage.selectedButtonId
         if (id === "logo1") {
         let data1 = await fetchJson(`${apilink2}/api/logo?url=${logo1}&name=${q}`)
-        await conn.sendMessage(from, {
-          image: { url: data1.result.download_url },
-          caption: caption
-        }, { quoted: mek })
+        await conn.sendMessage(from, { image :{url : `${data1.result.download_url}`}, caption : `${caption}`},{quoted : mek})
     }
 
     if (id === "logo2") {
         let data2 = await fetchJson(`${apilink2}/api/logo?url=${logo2}&name=${q}`)
         await conn.sendMessage(from, {
-          image: { url: data2.result.download_url },
+          image: { url : `${data1.result.download_url}`},
           caption: caption
         }, { quoted: mek })
     }
