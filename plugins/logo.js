@@ -11,7 +11,8 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
     try {
         if(!q) return reply("*_Please give me a text._*")
 
-        let logoMsg = `*NOVA-X LOGO CREATION📨*
+        // Extend message list
+let logoMsg = `*NOVA-X LOGO CREATION📨*
 
 *Text :* ${q}
 
@@ -37,6 +38,11 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
 ┃ *18.❯* Typography
 ┃ *19.❯* Modern Gold
 ┃ *20.❯* Matrix
+┃ *21.❯* Glitch (Logo1)
+┃ *22.❯* Neon (Logo1)
+┃ *23.❯* Magma (Logo1)
+┃ *24.❯* Ice Cold (Logo1)
+┃ *25.❯* Thunder (Logo1)
 ╰━━━━━━━━━━━━━━━➤
 
 > ᴘᴏᴡᴇʀᴇᴅ ʙʏ ɴᴏᴠᴀ-x-ᴍᴅ`
@@ -149,7 +155,27 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
                         let data20 = await fetchJson(`${apilink2}/api/logo?url=${logo20}&name=${q}`)
                         await conn.sendMessage(from, { image :{url : `${data20.result.download_url}`}, caption : `${caption}`},{quoted : mek})
                         break;
-                    default:
+                    case '21':
+    let d21 = await fetchJson(`${apilink2}/api/logo?url=${logo21}&name=${q}`)
+    await conn.sendMessage(from, { image: { url: d21.result.download_url }, caption }, { quoted: mek })
+    break;
+case '22':
+    let d22 = await fetchJson(`${apilink2}/api/logo?url=${logo22}&name=${q}`)
+    await conn.sendMessage(from, { image: { url: d22.result.download_url }, caption }, { quoted: mek })
+    break;
+case '23':
+    let d23 = await fetchJson(`${apilink2}/api/logo?url=${logo23}&name=${q}`)
+    await conn.sendMessage(from, { image: { url: d23.result.download_url }, caption }, { quoted: mek })
+    break;
+case '24':
+    let d24 = await fetchJson(`${apilink2}/api/logo?url=${logo24}&name=${q}`)
+    await conn.sendMessage(from, { image: { url: d24.result.download_url }, caption }, { quoted: mek })
+    break;
+case '25':
+    let d25 = await fetchJson(`${apilink2}/api/logo?url=${logo25}&name=${q}`)
+    await conn.sendMessage(from, { image: { url: d25.result.download_url }, caption }, { quoted: mek })
+    break;
+                  default:
                         reply("*_Invalid number.Please reply a valid number._*");
                 }
             }
@@ -182,6 +208,12 @@ const logo17 = `https://en.ephoto360.com/write-text-on-wet-glass-online-589.html
 const logo18 = `https://en.ephoto360.com/create-online-typography-art-effects-with-multiple-layers-811.html`;
 const logo19 = `https://en.ephoto360.com/modern-gold-5-215.html`;
 const logo20 = `https://en.ephoto360.com/matrix-text-effect-154.html`;
+const logo21 = `https://en.ephoto360.com/create-a-glitch-text-effect-online-free-712.html`;
+const logo22 = `https://en.ephoto360.com/create-glowing-neon-text-effect-online-free-879.html`;
+const logo23 = `https://en.ephoto360.com/create-magma-hot-text-effect-online-642.html`;
+const logo24 = `https://en.ephoto360.com/ice-cold-text-effect-155.html`;
+const logo25 = `https://en.ephoto360.com/create-thunder-text-effect-online-free-631.html`;
+
 
 const apilink2 = 'https://api-pink-venom.vercel.app';
 const caption = `> ɢᴇɴᴀʀᴀᴛᴇᴅ ʙʏ ɴᴏᴠᴀ-x- ᴍᴅ`;
