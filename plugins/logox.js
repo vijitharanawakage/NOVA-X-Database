@@ -41,10 +41,22 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
 
 > ᴘᴏᴡᴇʀᴇᴅ ʙʏ ɴᴏᴠᴀ-x-ᴍᴅ`
   
-   let buttons = [
-  { buttonId: "logo1", buttonText: { displayText: "🖼 Logo 1" }, type: 1 },
-  { buttonId: "logo2", buttonText: { displayText: "🔥 Logo 2" }, type: 1 }
-]
+   let sections = [
+  {
+    title: "Main Menu",
+    rows: [
+      { title: "Option 1", rowId: "1" },
+      { title: "Option 2", rowId: "2" },
+      { title: "Option 3", rowId: "3" }
+    ]
+  }
+];
+
+await conn.sendMessage(from, {
+  text: "Select from the menu 👇",
+  buttonText: "MENU 📃", // Button label
+  sections
+});
         const fdChannel = {
             newsletterJid: "120363409414874042@newsletter",
             newsletterName: "𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃",
@@ -58,7 +70,7 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
         };
         const msgBody = {
             buttons,
-            headerType: 4,
+            headerType: 1,
             viewOnce: true,
             image: {url:`https://files.catbox.moe/rxaw7o.jpeg`},
             caption: logoMsg,
@@ -74,27 +86,27 @@ async(conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, send
 
             const selectedOption = msg.message.extendedTextMessage.text.trim();
 
-           //////// response handle
-if (mek.message?.buttonsResponseMessage) {
-    let id = mek.message.buttonsResponseMessage.selectedButtonId
-        if (id === "logo1") {
-        let data1 = await fetchJson(`${apilink2}/api/logo?url=${logo1}&name=${q}`)
-        await conn.sendMessage(from, { image :{url : `${data1.result.download_url}`}, caption : `${caption}`},{quoted : mek})
-    }
+let selectedOption;
 
-    if (id === "logo2") {
-        let data2 = await fetchJson(`${apilink2}/api/logo?url=${logo2}&name=${q}`)
-        await conn.sendMessage(from, {
-          image: { url : `${data1.result.download_url}`},
-          caption: caption
-        }, { quoted: mek })
-    }
+// button response (quick reply / normal button)
+if (msg.message?.buttonsResponseMessage) {
+    selectedOption = msg.message.buttonsResponseMessage.selectedButtonId;
 }
+// selection button (list message)
+else if (msg.message?.listResponseMessage) {
+    selectedOption = msg.message.listResponseMessage.singleSelectReply.selectedRowId;
+}
+// typed text
+else if (msg.message?.extendedTextMessage) {
+    selectedOption = msg.message.extendedTextMessage.text.trim();
+}
+
             //////////////////////
     
             if (msg.message.extendedTextMessage.contextInfo && msg.message.extendedTextMessage.contextInfo.stanzaId === send.key.id) {
                 switch (selectedOption) {
                     case '1':
+                    case "Option 1":   
                         let data1 = await fetchJson(`${apilink2}/api/logo?url=${logo1}&name=${q}`)
                         await conn.sendMessage(from, { image :{url : `${data1.result.download_url}`}, caption : `${caption}`},{quoted : mek})
                         break;
