@@ -41,20 +41,32 @@ cmd({
             `5. 𝚆𝙰𝙸𝚃 𝙵𝙾𝚁 𝚃𝙷𝙴 𝙱𝙾𝚃 𝚃𝙾 𝙲𝙾𝙽𝙽𝙴𝙲𝚃.\n\n` +
             `⚠️ *ＮＯＴＥ:* 𝚃𝙷𝙸𝚂 𝙲𝙾𝙳𝙴 𝚆𝙸𝙻𝙻 𝙴𝚇𝙿𝙸𝚁𝙴 𝙸𝙽 1 𝙼𝙸𝙽𝚄𝚃𝙴. 𝚄𝚂𝙴 𝙸𝚃 𝙸𝙼𝙼𝙴𝙳𝙸𝙰𝚃𝙻𝚈..!`;
 
-        if (process.env.BUTTON === 'true') {
-            await conn.sendMessage(from, {
-                text: instructions,
-                buttons: [
-                    { buttonId: `.copy ${pairingCode}`, buttonText: { displayText: "📋 𝙲𝙾𝙿𝚈 𝙲𝙾𝙳𝙴" }, type: 1 },
-                    { buttonId: `.pair ${phoneNumber}`, buttonText: { displayText: "🔄 𝙶𝙴𝙽𝙴𝚁𝙰𝚃𝙴 𝙰𝙶𝙰𝙸𝙽" }, type: 1 }
-                ],
-                headerType: 4
-            }, { quoted: mek });
-        } else {
-            await reply(instructions);
-            await new Promise(r => setTimeout(r, 2000));
-            await reply(pairingCode);
-        }
+       if (process.env.BUTTON === 'true') {
+    await conn.sendMessage(from, {
+        text: instructions,
+        footer: "NOVA-X MD Pairing System",
+        templateButtons: [
+            {
+                index: 1,
+                quickReplyButton: {
+                    displayText: `📋 COPY CODE`,
+                    id: pairingCode   // <-- OTP Direct Copy Text
+                }
+            },
+            {
+                index: 2,
+                quickReplyButton: {
+                    displayText: "🔄 GENERATE AGAIN",
+                    id: `.pair ${phoneNumber}`
+                }
+            }
+        ]
+    }, { quoted: mek });
+} else {
+    await reply(instructions);
+    await new Promise(r => setTimeout(r, 2000));
+    await reply(pairingCode);
+}
 
     } catch (err) {
         console.error("Pair command error:", err);
