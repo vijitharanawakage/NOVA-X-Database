@@ -70,8 +70,25 @@ cmd({
 ╰─────────────────────────◉
 ${config.FOOTER}`;
 
+        let buttons = [
+                {
+        buttonId: ".owner",
+        buttonText: { displayText: "OWNER👨‍💻" },
+        type: 1
+    },
+    {
+        buttonId: ".ping",
+        buttonText: { displayText: "PING🧬" },
+        type: 1
+    }
+];
+
+      
         // 2️⃣ Send image + status in separate message
         await conn.sendMessage(from, {
+             buttons,
+            headerType: 1,
+            viewOnce: true,
             image: { url: "https://files.catbox.moe/er0vnl.png" },
             caption: status,
             contextInfo: {
