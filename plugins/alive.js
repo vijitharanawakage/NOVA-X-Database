@@ -59,17 +59,16 @@ cmd({
         const senderName = m.pushName || "User"
 
         const status = `
-╭───〔 *🤖 ${config.BOT_NAME} 𝐒ᴛᴀᴛᴜ𝐒* 〕──◉
-│✨ *𝙱𝙾𝚃 𝙸𝚂 𝙰𝙲𝚃𝙸𝚅𝙴 & 𝙾𝙽𝙻𝙸𝙽𝙴..!*
 │👋Hello ${senderName}, welcome 𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃
-│👨‍💻*OWNER:* ${config.OWNER_NAME}
+╭──────────────◉
+│👨‍💻 *OWNER:* ${config.OWNER_NAME}
 │⚡ *VERSION:* 1.0.0
 │📝 *PREFIX:* [${config.PREFIX}]
 │📳 *MODE:* [${config.MODE}]
 │💾 *RAM:* ${usedMem}MB / ${totalMem}MB
 │🖥️ *PLATFORM* : ${platform} (${arch})
 │⏱️ *UPTIME* : ${hours}ｈ ${minutes}ｍ ${seconds}ｓ
-╰─────────────────────◉
+╰──────────────────◉
 ${config.FOOTER}`;
 
         let buttons = [
