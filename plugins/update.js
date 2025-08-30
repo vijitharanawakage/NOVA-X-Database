@@ -1,3 +1,4 @@
+
 const { cmd } = require("../lib/command");
 const axios = require("axios");
 const fs = require("fs");
@@ -16,7 +17,7 @@ cmd({
     const repoName = "NOVA-X-Database";        
     const zipUrl = `https://github.com/${repoOwner}/${repoName}/archive/refs/heads/main.zip`;
 
-    reply("*𝐃ᴏᴡɴʟᴏᴀᴅɪɴɢ 𝐋ᴀᴛᴇꜱᴛ 𝐔ᴘᴅᴀᴛᴇ...⏳*");
+    reply("*Downloading latest update...⏳*");
 
     const zipPath = path.join(__dirname, "update.zip");
     const writer = fs.createWriteStream(zipPath);
@@ -25,7 +26,7 @@ cmd({
     response.data.pipe(writer);
 
     writer.on("finish", async () => {
-      reply("*𝐄xᴛʀᴀᴄᴛɪɴɢ 𝐔ᴘᴅᴀᴛᴇ...📦*");
+      reply("*Extracting update..📦*");
 
       const skipFiles = ["index.js", "config.js", "settings.js"];
 
@@ -52,9 +53,9 @@ cmd({
 
       fs.unlinkSync(zipPath);
 
-      reply("*✅ 𝚄𝙿𝙳𝙰𝚃𝙴 𝙲𝙾𝙼𝙿𝙻𝙴𝚃𝙴𝙳...! 🔁 Ｒᴇꜱᴛᴀʀᴛɪɴɢ Ｎᴏᴠᴀ-Ｘ ＭＤ...*");
+      reply("*Update completed! Restarting bot...✅*");
       exec("pm2 restart all", (err) => {
-        if (err) reply(`Update done ✅, but restart failed ❌:\n${err}`);
+        if (err) reply(`⚠️ Update done, but restart failed:\n${err}`);
       });
     });
 
