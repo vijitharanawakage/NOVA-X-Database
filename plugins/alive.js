@@ -73,12 +73,12 @@ ${config.FOOTER}`;
         let buttons = [
                 {
         buttonId: ".owner",
-        buttonText: { displayText: "OWNER👨‍💻" },
+        buttonText: { displayText: "⫷ 𝗢𝗪𝗡𝗘𝗥 ⫸" },
         type: 1
     },
     {
         buttonId: ".ping",
-        buttonText: { displayText: "PING🧬" },
+        buttonText: { displayText: "⫷ 𝗣𝗜𝗡𝗚 ⫸" },
         type: 1
     }
 ];
