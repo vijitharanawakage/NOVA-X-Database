@@ -7,7 +7,7 @@ module.exports = {
 
 SESSION_ID: process.env.SESSION_ID === undefined ? 'KSMD~64gAUKpL#L54BesgPi6N_495aAQtfaIushlYADTHNzuGzz3Wd5S0' : process.env.SESSION_ID,
 PREFIX: process.env.PREFIX || '.',
-FOOTER: process.env.FOOTER || '> *© Powered By Nova-X Md 💸*',
+FOOTER: process.env.FOOTER || '> *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ ɴᴏᴠᴀ-x-ᴍᴅ 💸*',
 BOT_NAME: process.env.BOT_NAME || '𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃',
 OWNER_NAME: process.env.OWNER_NAME || '_Mr Unknown X Luxalgo_',
 MODE: process.env.MODE === undefined ?"groups" : process.env.MODE,
