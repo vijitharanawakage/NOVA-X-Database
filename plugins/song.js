@@ -42,8 +42,8 @@ cmd({
             `👤 *𝙰𝚄𝚃𝙷𝙾𝚁:* ${author?.name || "Unknown"}\n` +
             `🖇 *𝚄𝚁𝙻:* ${url || "Unknown"}\n\n` +
             `🔽 *REPLY WITH YOUR CHOICE*\n\n` +
-            `1. *AUDIO* 🎵\n` +
-            `2. *DOCUMENT* 📁\n\n` +
+            `1. *AUDIO TYPE* 🎵\n` +
+            `2. *DOCUMENT TYPE* 📁\n\n` +
             `*ᴘᴏᴡᴇʀᴇᴅ ʙʏ ɴᴏᴠᴀ-x-ᴍᴅ*"}`;
 
         const sentMsg = await conn.sendMessage(from, { image: { url: image }, caption: info }, { quoted: mek });
