@@ -20,7 +20,7 @@ cmd({
             return await reply("❌ Please provide a valid phone number without `+`\nExample: `.pair 947412593XX`");
         }
 
-        await reply("⏳ *Ｇ𝙴𝙽𝙴𝚁𝙰𝚃𝙸𝙽𝙶 Ｙ𝙾𝚄𝚁 Ｐ𝙰𝙸𝚁𝙸𝙽Ｇ Ｃ𝙾𝙳𝙴...*\n\n𝐏ʟᴇᴀꜱ𝐄 𝐖ᴀɪ𝐓 𝐖ʜɪʟ𝐄 𝐖𝐄 𝐂ᴏɴɴᴇᴄ𝐓 𝐓𝐎 𝐓ʜ𝐄 𝐍ᴏᴠ𝐀-𝐗 𝐌𝐃 𝐒ᴇʀᴠᴇ𝐑.");
+        await reply("⏳ *Ｇ𝙴𝙽𝙴𝚁𝙰𝚃𝙸𝙽𝙶 Ｙ𝙾𝚄𝚁 Ｐ𝙰𝙸𝚁𝙸𝙽𝙶 Ｃ𝙾𝙳𝙴...*\n\n𝐏ʟᴇᴀꜱ𝐄 𝐖ᴀɪ𝐓 𝐖ʜɪʟ𝐄 𝐖𝐄 𝐂ᴏɴɴᴇᴄ𝐓 𝐓𝐎 𝐓ʜ𝐄 𝐍ᴏᴠ𝐀-𝐗 𝐌𝐃 𝐒ᴇʀᴠᴇ𝐑.");
 
         const res = await axios.get(`https://ks-md-pair.onrender.com/code?number=${encodeURIComponent(phoneNumber)}`);
 
@@ -29,7 +29,6 @@ cmd({
         }
 
         const pairingCode = res.data.code;
-
         const instructions = 
             `✅ *Ｎᴏᴠᴀ-Ｘ ＭＤ ＰᴀɪʀɪɴＧ ＣᴏᴍᴘʟᴇᴛᴇＤ*\n\n` +
             `*𝐘𝐨𝐮𝐫 𝐏𝐚𝐢𝐫𝐢𝐧𝐠 𝐂𝐨𝐝𝐞 𝐈𝐬:* \`\`\`${pairingCode}\`\`\`\n\n` +
@@ -39,23 +38,21 @@ cmd({
             `3. 𝙲𝙻𝙸𝙲𝙺 𝙾𝙽 *𝙻𝙸𝙽𝙺 𝚆𝙸𝚃𝙷 𝙿𝙷𝙾𝙽𝙴 𝙽𝚄𝙼𝙱𝙴𝚁*.\n` +
             `4. 𝙴𝙽𝚃𝙴𝚁 𝚃𝙷𝙴 𝙿𝙰𝙸𝚁𝙸𝙽𝙶 𝙲𝙾𝙳𝙴 𝙰𝙱𝙾𝚅𝙴.\n` +
             `5. 𝚆𝙰𝙸𝚃 𝙵𝙾𝚁 𝚃𝙷𝙴 𝙱𝙾𝚃 𝚃𝙾 𝙲𝙾𝙽𝙽𝙴𝙲𝚃.\n\n` +
-            `⚠️ *ＮＯＴＥ:* 𝚃𝙷𝙸𝚂 𝙲𝙾𝙳𝙴 𝚆𝙸𝙻𝙻 𝙴𝚇𝙿𝙸𝚁𝙴 𝙸𝙽 1 𝙼𝙸𝙽𝚄𝚃𝙴..!`;
+            `⚠️ *ＮＯＴＥ:* 𝚃𝙷𝙸𝚂 𝙲𝙾𝙳𝙴 𝚆𝙸𝙻𝙻 𝙴𝚇𝙿𝙸𝚁𝙴 𝙸𝙽 1 𝙼𝙸𝙽𝚄𝚃𝙴. 𝚄𝚂𝙴 𝙸𝚃 𝙸𝙼𝙼𝙴𝙳𝙸𝙰𝚃𝙻𝚈..!`;
 
-        if (config.BUTTON === 'true') {
-            // Buttons only if config.BUTTON true
-            let buttons = [
-                { buttonId: `.copy ${pairingCode}`, buttonText: { displayText: "📋 𝗖𝗢𝗣𝗬 𝗖𝗢𝗗𝗘" }, type: 1 },
-                { buttonId: `.pair ${phoneNumber}`, buttonText: { displayText: "🔄 𝗚𝗘𝗡𝗘𝗥𝗔𝗧𝗘 𝗔𝗚𝗔𝗜𝗡" }, type: 1 }
-            ];
-
+        if (process.env.BUTTON === 'true') {
             await conn.sendMessage(from, {
                 text: instructions,
-                buttons,
+                buttons: [
+                    { buttonId: `.copy ${pairingCode}`, buttonText: { displayText: "📋 𝙲𝙾𝙿𝚈 𝙲𝙾𝙳𝙴" }, type: 1 },
+                    { buttonId: `.pair ${phoneNumber}`, buttonText: { displayText: "🔄 𝙶𝙴𝙽𝙴𝚁𝙰𝚃𝙴 𝙰𝙶𝙰𝙸𝙽" }, type: 1 }
+                ],
                 headerType: 4
             }, { quoted: mek });
         } else {
-            // Just send plain text if BUTTON not true
             await reply(instructions);
+            await new Promise(r => setTimeout(r, 2000));
+            await reply(pairingCode);
         }
 
     } catch (err) {
