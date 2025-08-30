@@ -17,7 +17,7 @@ async (conn, mek, m, { from, q, reply }) => {
         const response = await axios.get(url);
         const data = response.data;
         const weather = `
-> 🌍 *𝐖ᴇᴀᴛʜᴇ𝐑 𝐈ɴꜰᴏʀᴍᴀᴛɪᴏ𝐍 𝐅ᴏ𝐑 ${data.name}, ${data.sys.country}* 🌍
+> 🌍 *𝐖ᴇᴀᴛʜᴇ𝐑 𝐈ɴꜰᴏʀᴍᴀᴛɪᴏ𝐍 𝐅ᴏ𝐑 ${data.name}, ${data.sys.country}* 🌍\n\n
 > 🌡️ *𝚃𝙴𝙼𝙿𝙴𝚁𝙰𝚃𝚄𝚁𝙴*: ${data.main.temp}°C
 > 🌡️ *𝙵𝙴𝙴𝙻𝚂 𝙻𝙸𝙺𝙴*: ${data.main.feels_like}°C
 > 🌡️ *𝙼𝙸𝙽 𝚃𝙴𝙼𝙿*: ${data.main.temp_min}°C
