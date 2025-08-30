@@ -85,6 +85,7 @@ ${config.FOOTER}`;
        urlbutton: {
            displayText: "web site",
            url: "www.hirutv.lk"
+       }
    }           
 ];
 
