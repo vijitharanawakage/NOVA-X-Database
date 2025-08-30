@@ -21,7 +21,7 @@ async (conn, mek, m, { from, q, reply }) => {
     const result = await getFBInfo(q);
 
     const captionHeader = `
-*🎥 LUXALGO FB DOWNLOADER 🎥*
+*🎥 NOVA-X FB DOWNLOADER 🎥*
 
 🔗 *ᴜʀʟ*: ${q} 
 
@@ -76,9 +76,9 @@ async (conn, mek, m, { args, from, reply }) => {
     const result = await getFBInfo(url);
 
     if (type === "sd") {
-      await conn.sendMessage(from, { video: { url: result.sd }, caption: "> *© Powdered By luxalgo*" }, { quoted: mek });
+      await conn.sendMessage(from, { video: { url: result.sd }, caption: "> *© Powdered By  𝐍ᴏᴠᴀ-𝐗 *" }, { quoted: mek });
     } else if (type === "hd") {
-      await conn.sendMessage(from, { video: { url: result.hd }, caption: "> *© Powdered By luxalgo*" }, { quoted: mek });
+      await conn.sendMessage(from, { video: { url: result.hd }, caption: "> *© Powdered By  𝐍ᴏᴠᴀ-𝐗 *" }, { quoted: mek });
     } else if (type === "audio") {
       await conn.sendMessage(from, { audio: { url: result.sd }, mimetype: "audio/mpeg" }, { quoted: mek });
     } else {
