@@ -81,12 +81,13 @@ ${config.FOOTER}`;
         buttonText: { displayText: "⫷ 𝗣𝗜𝗡𝗚 ⫸" },
         type: 1
     },
-   {  
-       urlbutton: {
-           displayText: "web site",
-           url: "www.hirutv.lk"
-       }
-   }           
+    {
+      name: "cta_url",
+      buttonParamsJson: JSON.stringify({
+        display_text: "🌐 Visit Website",
+        url: "www.hirutv.lk"
+      })
+    }
 ];
 
       
