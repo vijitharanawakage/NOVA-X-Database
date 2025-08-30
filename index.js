@@ -44,7 +44,6 @@ const { File } = require('megajs')
 const { exec } = require('child_process');
 const { tmpdir } = require('os')
 const Crypto = require('crypto')
-const prefix = config.PREFIX
 const Jimp = require('jimp')
 
  function genMsgId() {
