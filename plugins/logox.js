@@ -1,6 +1,5 @@
 const { cmd, commands } = require("../lib/command");
-const { fetchJson } = require("../lib/functions");
-const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson, jsonformat} = require('../lib/functions')
+const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson, jsonformat} = require('../lib/functions');
 
 cmd({
     pattern: "logo2",
