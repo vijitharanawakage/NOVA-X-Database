@@ -86,7 +86,6 @@ await conn.sendMessage(from, {
 
             const selectedOption = msg.message.extendedTextMessage.text.trim();
 
-let selectedOption;
 
 // button response (quick reply / normal button)
 if (msg.message?.buttonsResponseMessage) {
