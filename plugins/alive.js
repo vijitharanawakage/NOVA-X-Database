@@ -13,26 +13,26 @@ cmd({
     try {
         // Random English quotes/messages
         const messages = [
-            "💫 Keep shining, the bot is alive and ready!",
-            "🔥 Energy high, problems low. I'm online!",
-            "✨ Life is awesome! Bot is up and running!",
-            "⚡ Stay focused, stay powerful. Bot active now!",
-            "🌟 Happiness is key. Bot online and energized!",
-            "💡 Creativity flowing, assistance ready anytime!",
-            "🚀 Ready for action! The bot is fully operational!",
-            "🎯 Target achieved: Bot is alive and kicking!",
-            "🌈 Spread positivity! The bot is online!",
-            "⚡ Lightning fast! Bot is ready for commands!",
-            "🎉 Celebration time! The bot is up!",
-            "💥 Power mode ON! Bot active!",
-            "🌟 Star quality! I'm online!",
-            "🔥 Fuelled with energy! Bot ready!",
-            "✨ Magic is real! Bot alive!",
-            "💡 Bright ideas flowing! Bot at your service!",
-            "🚀 Launch sequence complete! I'm online!",
-            "🎯 Aim high, bot ready to assist!",
-            "⚡ Shockwaves incoming! Bot is alive!",
-            "🌈 Rainbow vibes! Bot active and cheerful!"
+            "*💫 Keep shining, the bot is alive and ready...!*",
+            "*🔥 Energy high, problems low. I'm online...!*",
+            "*✨ Life is awesome..! Bot is up and running...!*",
+            "*⚡ Stay focused, stay powerful. Bot active now...!*",
+            "*🌟 Happiness is key. Bot online and energized...!*",
+            "*💡 Creativity flowing, assistance ready anytime...!*",
+            "*🚀 Ready for action...! The bot is fully operational...!*",
+            "*🎯 Target achieved: Bot is alive and kicking...!*",
+            "*🌈 Spread positivity...! The bot is online...!*",
+            "*⚡ Lightning fast...! Bot is ready for commands...!*",
+            "*🎉 Celebration time...! The bot is up...!*",
+            "*💥 Power mode ON! Bot active...!*",
+            "*🌟 Star quality...! I'm online...!*",
+            "*🔥 Fuelled with energy! Bot ready...!*",
+            "*✨ Magic is real...! Bot alive...!*",
+            "*💡 Bright ideas flowing...! Bot at your service...!*",
+            "*🚀 Launch sequence complete! I'm online...!*",
+            "*🎯 Aim high, bot ready to assist...!*",
+            "*⚡ Shockwaves incoming...! Bot is alive...!*",
+            "🌈 Rainbow vibes...! Bot active and cheerful..!*"
         ];
 
         // Pick a random message
