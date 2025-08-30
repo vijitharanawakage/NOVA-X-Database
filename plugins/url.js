@@ -65,7 +65,7 @@ cmd({
       `*${mediaType} 𝐔ᴘʟᴏᴀᴅᴇᴅ 𝐒ᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ*\n\n` +
       `*𝐒ɪᴢᴇ:* ${formatBytes(mediaBuffer.length)}\n` +
       `*𝐔𝐑𝐋:* ${mediaUrl}\n\n` +
-      `> *© Powered By King-Sandesh-Md V2 💸*`
+      `> *© ᴘᴏᴡᴇʀᴇᴅ ʙʏ ɴᴏᴠᴀ-x-ᴍᴅ  💸*`
     );
 
   } catch (error) {
