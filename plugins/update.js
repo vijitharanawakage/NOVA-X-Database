@@ -17,7 +17,7 @@ cmd({
     const repoName = "NOVA-X-Database";        
     const zipUrl = `https://github.com/${repoOwner}/${repoName}/archive/refs/heads/main.zip`;
 
-    reply("*Downloading latest update...⏳*");
+    reply("*𝐃ᴏᴡɴʟᴏᴀᴅɪɴɢ 𝐋ᴀᴛᴇꜱᴛ 𝐔ᴘᴅᴀᴛᴇ...⏳*");
 
     const zipPath = path.join(__dirname, "update.zip");
     const writer = fs.createWriteStream(zipPath);
@@ -26,7 +26,7 @@ cmd({
     response.data.pipe(writer);
 
     writer.on("finish", async () => {
-      reply("*Extracting update..📦*");
+      reply("*𝐄xᴛʀᴀᴄᴛɪɴɢ 𝐔ᴘᴅᴀᴛᴇ...📦*");
 
       const skipFiles = ["index.js", "config.js", "settings.js"];
 
@@ -53,9 +53,9 @@ cmd({
 
       fs.unlinkSync(zipPath);
 
-      reply("*Update completed! Restarting bot...✅*");
+      reply("*✅ 𝚄𝙿𝙳𝙰𝚃𝙴 𝙲𝙾𝙼𝙿𝙻𝙴𝚃𝙴𝙳...! 🔁 Ｒᴇꜱᴛᴀʀᴛɪɴɢ Ｎᴏᴠᴀ-Ｘ ＭＤ...*");
       exec("pm2 restart all", (err) => {
-        if (err) reply(`⚠️ Update done, but restart failed:\n${err}`);
+        if (err) reply(`Update done ✅, but restart failed ❌:\n${err}`);
       });
     });
 
