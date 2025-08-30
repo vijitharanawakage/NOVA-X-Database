@@ -59,7 +59,7 @@ cmd({
         const senderName = m.pushName || "User"
 
         const status = `
-👋Hello *${senderName},* welcome 𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃
+👋 𝙷𝙴𝙻𝙻𝙾𝚆 *${senderName},* 𝚆𝙴𝙻𝙲𝙾𝙼𝙴 𝚃𝙾 𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃 👾
 ╭─────────────────◉
 │👨‍💻 *OWNER:* ${config.OWNER_NAME}
 │⚡ *VERSION:* 1.0.0
@@ -74,12 +74,12 @@ ${config.FOOTER}`;
         let buttons = [
                 {
         buttonId: ".owner",
-        buttonText: { displayText: "⫷ 𝗢𝗪𝗡𝗘𝗥 ⫸" },
+        buttonText: { displayText: "❭❭ 𝙾𝚆𝙽𝙴𝚁 ✗" },
         type: 1
     },
     {
         buttonId: ".ping",
-        buttonText: { displayText: "⫷ 𝗣𝗜𝗡𝗚 ⫸" },
+        buttonText: { displayText: "❭❭ 𝙿𝙸𝙽𝙶 ✗" },
         type: 1
     }
 ];
