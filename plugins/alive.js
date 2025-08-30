@@ -39,7 +39,7 @@ cmd({
         const randomMsg = messages[Math.floor(Math.random() * messages.length)];
 
         // 1️⃣ Send the random message first
-        await reply(randomMsg);
+        await conn.sendMessage(from, { text: randomMsg }, { quoted: mek });
 
         // Memory
         const totalMem = (os.totalmem() / 1024 / 1024).toFixed(2); // MB
