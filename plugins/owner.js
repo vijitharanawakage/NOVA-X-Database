@@ -27,14 +27,15 @@ ORG:NOVA-X MD;
 TEL;type=CELL;type=VOICE;waid=${contact.number}:${contact.number}
 END:VCARD`;
 
+      // Each contact as separate message
       await conn.sendMessage(m.chat, {
-        contacts: {
+        contacts: [{
           displayName: contact.name,
-          contacts: [{ vcard }]
-        }
+          vcard
+        }]
       }, { quoted: mek, react: "📇" });
 
-      // Delay to prevent WhatsApp rate-limit issues
+      // Small delay to avoid rate limits
       await new Promise(resolve => setTimeout(resolve, 500));
     }
 
