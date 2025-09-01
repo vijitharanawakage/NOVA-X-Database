@@ -13,7 +13,7 @@ async (conn, mek, m) => {
   let start = performance.now()
 
   // send temporary message
-  let sentMsg = await conn.sendMessage(m.chat, { text: "🏓 𝙿𝙸𝙽𝙶𝙸𝙽𝙶 𝙺𝚂𝙼𝙳..." }, { quoted: mek })
+  let sentMsg = await conn.sendMessage(m.chat, { text: "🏓 𝙿𝙸𝙽𝙶𝙸𝙽𝙶 𝙽𝙾𝚅𝙰-𝚇..." }, { quoted: mek })
 
   // end timer
   let end = performance.now()
