@@ -21,17 +21,17 @@ async (conn, mek, m) => {
   let ping = (end - start).toFixed(0)
 
   // edit message with ping result
-  await conn.sendMessage(m.chat, { 
-    text: `*PONG 🏓*\n📡 Response Time: \`${ping} ms\`` 
+  // final ping message
+const text = `*PONG 🏓*\n📡 Response Time: \`${ping} ms\` ${reactionEmoji}`;
+await conn.sendMessage(m.chat, {
+    text,
+    contextInfo: {
+        mentionedJid: [m.sender],
+        forwardingScore: 999,
+        isForwarded: true
+    }
+}, { quoted: mek });
 
-        await conn.sendMessage(from, {
-            text,
-            contextInfo: {
-                mentionedJid: [sender],
-                forwardingScore: 999,
-                isForwarded: true
-            }
-        }, { quoted: mek });
 
     } catch (e) {
         console.error("ping2 error:", e);
