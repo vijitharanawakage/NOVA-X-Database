@@ -1,107 +1,86 @@
-const config = require('../settings');
-const { cmd, commands } = require('../lib/command');
+const { performance } = require("perf_hooks") 
+const { cmd } = require('../lib/command')
 
-// ⚡ PING2
+// 🔹 ping2 command (default fallback)
 cmd({
-    pattern: "ping2",
-    alias: ["speed", "pong"],
-    use: '.ping2',
-    desc: "Check bot's response time (alt).",
-    category: "main",
-    react: "⚡",
-    filename: __filename
+  pattern: "ping2",
+  desc: "Check bot ping",
+  react: "📡",
+  filename: __filename
+
 },
-async (conn, mek, m, { from, sender, reply }) => {
-    try {
-        const start = new Date().getTime();
+async (conn, mek, m) => {
+  // start timer
+  let start = performance.now()
 
-        const reactionEmojis = ['🔥', '⚡', '🚀', '💨', '🎯', '🎉', '🌟', '💥', '🕐', '🔹'];
-        const textEmojis = ['💎', '🏆', '⚡️', '🚀', '🎶', '🌠', '🌀', '🔱', '🛡️', '✨'];
+  // send temporary message
+  let sentMsg = await conn.sendMessage(m.chat, { text: "🏓 Pinging..." }, { quoted: mek })
 
-        const reactionEmoji = reactionEmojis[Math.floor(Math.random() * reactionEmojis.length)];
-        let textEmoji = textEmojis[Math.floor(Math.random() * textEmojis.length)];
+  // end timer
+  let end = performance.now()
+  let ping = (end - start).toFixed(0)
 
-        // Ensure reaction and text emojis are different
-        while (textEmoji === reactionEmoji) {
-            textEmoji = textEmojis[Math.floor(Math.random() * textEmojis.length)];
-        }
-
-        // Send reaction
-        await conn.sendMessage(from, {
-            react: { text: textEmoji, key: mek.key }
-        });
-
-        const end = new Date().getTime();
-        const responseTime = (end - start) / 1000;
-
-        const text = `> *📍 ɴᴏᴠᴀ-x ᴘɪɴɢ: ${responseTime.toFixed(2)} ᴍs ${reactionEmoji}*`;
+  // edit message with ping result
+  await conn.sendMessage(m.chat, { 
+    text: `*PONG 🏓*\n📡 Response Time: \`${ping} ms\`` 
 
         await conn.sendMessage(from, {
             text,
             contextInfo: {
                 mentionedJid: [sender],
                 forwardingScore: 999,
-                isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363409414874042@newsletter',
-                    newsletterName: "𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃",
-                    serverMessageId: 143
-                }
+                isForwarded: true
             }
         }, { quoted: mek });
 
     } catch (e) {
-        console.error("Error in ping2 command:", e);
-        reply(`An error occurred: ${e.message}`);
+        console.error("ping2 error:", e);
+        reply(`ping2 fallback failed: ${e.message}`);
     }
 });
 
-// 🍂 MAIN PING
+// 🔹 ping command (with auto fallback to ping2)
 cmd({
     pattern: "ping",
     desc: "Check bot's response time.",
     category: "main",
-    react: "🍂",
+    react: "📡",
     filename: __filename
-},
-async (conn, mek, m, { from, reply }) => {
+}, 
+async (conn, mek, m, { from, quoted, reply }) => {
     try {
-        const startTime = Date.now();
-        const { key } = await conn.sendMessage(from, { text: '*𝙿𝙸𝙽𝙶𝙸𝙽𝙶 𝙽𝙾𝚅𝙰-𝚇...*' });
-        const endTime = Date.now();
-        const ping = endTime - startTime;
-    
+        const start = new Date().getTime();
+        const { key } = await conn.sendMessage(from, { text: '*𝙿𝙸𝙽𝙶𝙸𝙽𝙶 𝙺𝚂𝙼𝙳...*' });
+        const end = new Date().getTime();
+        const ping = end - start;
+
         const loadingStages = [
-            'ʟᴏᴀᴅɪɴɢ 《 ▭▭▭▭▭▭▭▭▭▭ 》0%',
-            'ʟᴏᴀᴅɪɴɢ 《 ▬▭▭▭▭▭▭▭▭▭ 》10%',
-            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▭▭▭▭▭▭▭▭ 》20%',
-            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▭▭▭▭▭▭▭ 》30%',
-            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▭▭▭▭▭▭ 》40%',
-            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▬▭▭▭▭▭ 》50%',
-            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▬▬▭▭▭▭ 》60%',
-            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▬▬▬▭▭▭ 》70%',
-            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▬▬▬▬▭▭ 》80%',
-            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▬▬▬▬▬▭ 》90%',
-            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▬▬▬▬▬▬ 》100%',
-            `✅ 𝐑𝐞𝐬𝐩𝐨𝐧𝐬𝐞 𝐒𝐩𝐞𝐞𝐝 ${ping} 𝐦𝐬`,
+            'ʟᴏᴀᴅɪɴɢ 《 ▭▭▭▭▭▭▭▭▭▭ 》0%,',
+            'ʟᴏᴀᴅɪɴɢ 《 ▬▭▭▭▭▭▭▭▭▭ 》10%,',
+            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▭▭▭▭▭▭▭▭ 》20%,',
+            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▭▭▭▭▭▭▭ 》30%,',
+            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▭▭▭▭▭▭ 》40%,',
+            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▬▭▭▭▭▭ 》50%,',
+            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▬▬▭▭▭▭ 》60%,',
+            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▬▬▬▭▭▭ 》70%,',
+            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▬▬▬▬▭▭ 》80%,',
+            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▬▬▬▬▬▭ 》90%,',
+            'ʟᴏᴀᴅɪɴɢ 《 ▬▬▬▬▬▬▬▬▬▬ 》100%,',
+            `𝐑𝐞𝐬𝐩𝐨𝐧𝐬𝐞 𝐒𝐩𝐞𝐞𝐝 ${ping} 𝐦𝐬`
         ];
-    
-        for (let stage of loadingStages) {
-            await conn.relayMessage(
-                from,
-                {
-                    protocolMessage: {
-                        key,
-                        type: 14,
-                        editedMessage: { conversation: stage }
-                    },
-                },
-                {}
-            );
+
+        for (let i = 0; i < loadingStages.length; i++) {
+            await conn.relayMessage(from, {
+                protocolMessage: {
+                    key: key,
+                    type: 14,
+                    editedMessage: { conversation: loadingStages[i] }
+                }
+            }, {});
         }
     } catch (e) {
-        console.log("Ping failed, fallback to ping2...");
-        // fallback -> run ping2
-        commands["ping2"].function(conn, mek, m, { from, reply });
+        console.log("ping error:", e);
+        // Auto fallback to ping2
+        await cmd.commands.get("ping2").callback(conn, mek, m, { from, quoted, sender: m.sender, reply });
     }
 });
