@@ -27,16 +27,18 @@ ORG:NOVA-X MD;
 TEL;type=CELL;type=VOICE;waid=${contact.number}:${contact.number}
 END:VCARD`;
 
-      // Each contact as separate message
-      await conn.sendMessage(m.chat, {
-        contacts: [{
-          displayName: contact.name,
-          vcard
-        }]
-      }, { quoted: mek, react: "📇" });
+      await conn.sendMessage(
+        m.chat,
+        {
+          contacts: {
+            displayName: contact.name,
+            contacts: [{ vcard }],
+          },
+        },
+        { quoted: mek }
+      );
 
-      // Small delay to avoid rate limits
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 500)); // avoid rate limits
     }
 
   } catch (err) {
