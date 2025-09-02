@@ -1,4 +1,5 @@
 const axios = require("axios");
+const config = require('../settings');
 const { cmd } = require("../lib/command");
 
 cmd({
@@ -30,12 +31,12 @@ cmd({
     // only show first 5
     const sliced = results.slice(0, 5);
 
-    let textMsg = `🔞 𝐊ꜱᴍ𝐃 18+ 𝐕ɪᴅᴇ𝐎 𝐒ᴇᴀ𝐫𝐜𝐡 📥\n\n`;
-    textMsg += `*Search Results For:* ${query}\n\n`;
+    let textMsg = `🔞 𝐍ᴏᴠᴀ-𝐗 18+ 𝐕ɪᴅᴇ𝐎 𝐒ᴇᴀʀᴄʜ𝐇 📥\n\n`;
+    textMsg += `~*Search Results For:*~ ${query}\n\n`;
 
     const sections = [
       {
-        title: "📥 Download Options",
+        title: "📥 Ｄᴏᴡɴʟᴏᴀᴅ Ｏᴘᴛɪᴏɴꜱ",
         rows: sliced.map((v, i) => ({
           title: v.title,
           rowId: `.xvideo ${v.link}`,
@@ -46,9 +47,9 @@ cmd({
 
     await conn.sendMessage(m.chat, {
       text: textMsg,
-      footer: "🔞 XNXX Video Downloader",
-      title: "Select a video to download",
-      buttonText: "Results",
+      footer: "🔞 𝐍ᴏᴠᴀ-x 𝐌ᴅ 𝐗ᴠɪᴅᴇᴏ 𝐃ᴏᴡɴʟᴏᴀᴅᴇʀ\n\n> ву ѕαη∂єѕн внαѕнαηα χ ραтнυм мαℓѕαяα",
+      title: "𝚂𝙴𝙻𝙴𝙲𝚃 𝙰 𝚅𝙸𝙳𝙴𝙾 𝚃𝙾 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳",
+      buttonText: "ＲＥＳＵＬＴＳ",
       sections
     }, { quoted: mek });
 
@@ -69,7 +70,7 @@ cmd({
   const url = args[0];
   if (!url) return reply("*⚡ Please provide a valid xnxx URL...!*\nExample: *.xvideo https://www.xvideos.com/videoXXXXX/title*");
 
-  await reply("_*⏳ Ｆ𝙴𝚃𝙲𝙷𝙸𝙽𝙂 Ｖ𝙸𝙳𝙴𝙾 Ｄ𝙴𝚃𝙰𝙸𝙻𝚂....*_");
+  await reply("_*⏳ Ｆ𝙴𝚃𝙲𝙷𝙸𝙽𝙶 Ｖ𝙸𝙳𝙴𝙾 Ｄ𝙴𝚃𝙰𝙸𝙻𝚂....*_");
 
   try {
     const api = `https://api-aswin-sparky.koyeb.app/api/downloader/xnxx?url=${encodeURIComponent(url)}`;
@@ -86,7 +87,7 @@ cmd({
     const title = videoData.title || "xnxx_video";
     const duration = videoData.duration || "Unknown";
 
-    let caption = `🔞 _*${title}*_\n⏱ 𝐃𝐮𝐫𝐚𝐭𝐢𝐨𝐧: ${duration} Sec`;
+    let caption = `🔞 _*${title}*_\n⏱ 𝐃𝐮𝐫𝐚𝐭𝐢𝐨𝐧: ${duration} Sec\n\n${config.FOOTER}`;
 
     // file size check
     let fileSize = 0;
@@ -97,7 +98,7 @@ cmd({
 
     const maxSize = 64 * 1024 * 1024; // 64MB WhatsApp limit
     if (fileSize && fileSize > maxSize) {
-      return reply(`⚠️ File too large for WhatsApp!\nDownload manually:\n${videoUrl}`);
+      return reply(`*⚠️ File too large for WhatsApp..!*\n_Please Download Manually It:_\n${videoUrl}\n\n${config.FOOTER}`);
     }
 
     await conn.sendMessage(mek.chat, {
@@ -107,8 +108,3 @@ cmd({
       caption: caption
     }, { quoted: mek });
 
-  } catch (e) {
-    console.log("XNXX Download Error:", e);
-    reply("❌ Error occurred while downloading video.");
-  }
-});
