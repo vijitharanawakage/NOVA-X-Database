@@ -1,14 +1,13 @@
-const axios = require("axios");
 const { cmd } = require('../lib/command');
 const { fetchJson } = require('../lib/functions');
-const config = require('../settings');
 
 const api = `https://nethu-api-ashy.vercel.app`;
+global.fbDlSessions = global.fbDlSessions || {};
 
 cmd({
-  pattern: "facebook2",
+  pattern: "facebook",
   react: "🎥",
-  alias: ["fb2", "fbvideo2", "fbv"],
+  alias: ["fbb", "fbvideo", "fb"],
   desc: "Download videos from Facebook",
   category: "download",
   use: '.facebook <facebook_url>',
@@ -18,47 +17,37 @@ cmd({
     if (!q) return reply("🚩 Please give me a facebook url");
 
     const fb = await fetchJson(`${api}/download/fbdown?url=${encodeURIComponent(q)}`);
-
     if (!fb.result || (!fb.result.sd && !fb.result.hd)) {
       return reply("❌ I couldn't find anything.");
     }
 
-    let caption = `*🖥️ 𝐊ꜱᴍ𝐃 𝐅ᴀᴄᴇʙᴏᴏ𝐊 𝐃𝐋*\n\n📝 TITLE : Facebook Video\n🔗 URL : ${q}`;
-
+    let caption = `*🖥️ KSMd Facebook DL*\n\n🔗 URL : ${q}`;
     if (fb.result.thumb) {
-      await conn.sendMessage(from, {
-        image: { url: fb.result.thumb },
-        caption: caption,
-      }, { quoted: mek });
+      await conn.sendMessage(from, { image: { url: fb.result.thumb }, caption }, { quoted: mek });
     }
 
-    // ====== BUTTON MODE ENABLED ======
-    if (config.BUTTON === true) {
-      let buttons = [];
-      if (fb.result.sd) buttons.push({ buttonId: `fb_dl sd ${encodeURIComponent(q)}`, buttonText: { displayText: "📹 Download SD" }, type: 1 });
-      if (fb.result.hd) buttons.push({ buttonId: `fb_dl hd ${encodeURIComponent(q)}`, buttonText: { displayText: "🎬 Download HD" }, type: 1 });
-      if (fb.result.sd || fb.result.hd) buttons.push({ buttonId: `fb_dl audio ${encodeURIComponent(q)}`, buttonText: { displayText: "🎧 Audio Only" }, type: 1 });
+    // -------- BUTTONS --------
+    let buttons = [];
+    if (fb.result.sd) buttons.push({ buttonId: `fb_dl sd ${encodeURIComponent(q)}`, buttonText: { displayText: "📹 Download SD" }, type: 1 });
+    if (fb.result.hd) buttons.push({ buttonId: `fb_dl hd ${encodeURIComponent(q)}`, buttonText: { displayText: "🎬 Download HD" }, type: 1 });
+    if (fb.result.sd || fb.result.hd) buttons.push({ buttonId: `fb_dl audio ${encodeURIComponent(q)}`, buttonText: { displayText: "🎧 Audio Only" }, type: 1 });
 
-      await conn.sendMessage(from, {
-        text: "📥 Select download option:",
-        footer: "KSMd FB Downloader",
-        buttons: buttons,
-        headerType: 4
-      }, { quoted: mek });
-    } else {
-      // ====== FALLBACK: REPLY NUMBERS ======
-      let msg = `📥 *Select download option:*\n\n`;
-      let i = 1;
-      if (fb.result.sd) msg += `*${i++}.* 📹 Download SD\n`;
-      if (fb.result.hd) msg += `*${i++}.* 🎬 Download HD\n`;
-      msg += `*${i}.* 🎧 Audio Only\n\n_Reply with the number to download._`;
+    await conn.sendMessage(from, {
+      text: "📥 Select download option (use buttons or reply with number):",
+      footer: "KSMd FB Downloader",
+      buttons,
+      headerType: 4
+    }, { quoted: mek });
 
-      let sentMsg = await reply(msg);
+    // -------- REPLY NUMBERS --------
+    let msg = `📥 *Select download option (Reply number):*\n\n`;
+    let opts = [];
+    if (fb.result.sd) { msg += `1. 📹 Download SD\n`; opts.push("sd"); }
+    if (fb.result.hd) { msg += `2. 🎬 Download HD\n`; opts.push("hd"); }
+    msg += `${opts.length + 1}. 🎧 Audio Only\n\n_Reply with the number._`;
 
-      // store temporary session
-      global.fbDlSessions = global.fbDlSessions || {};
-      global.fbDlSessions[sentMsg.key.id] = { url: q, result: fb.result, from };
-    }
+    let sent = await reply(msg);
+    global.fbDlSessions[sent.key.id] = { url: q, opts, from };
 
   } catch (err) {
     console.error(err);
@@ -66,12 +55,12 @@ cmd({
   }
 });
 
-// Handle button clicks and reply number selections
+// -------- BUTTON HANDLER --------
 cmd({
   pattern: "fb_dl",
   dontAddCommandList: true,
   filename: __filename
-}, async (conn, mek, m, { from, args }) => {
+}, async (conn, mek, m, { from, args, reply }) => {
   let [quality, ...rest] = args;
   let url = decodeURIComponent(rest.join(" "));
 
@@ -79,52 +68,40 @@ cmd({
   if (!fb.result) return reply("❌ File not found.");
 
   if (quality === "sd" && fb.result.sd) {
-    return conn.sendMessage(from, {
-      video: { url: fb.result.sd },
-      mimetype: "video/mp4",
-      caption: `✅ Downloaded as *SD-Quality*`
-    }, { quoted: mek });
+    return conn.sendMessage(from, { video: { url: fb.result.sd }, mimetype: "video/mp4", caption: `✅ Downloaded as *SD*` }, { quoted: mek });
   }
-
   if (quality === "hd" && fb.result.hd) {
-    return conn.sendMessage(from, {
-      video: { url: fb.result.hd },
-      mimetype: "video/mp4",
-      caption: `✅ Downloaded as *HD-Quality*`
-    }, { quoted: mek });
+    return conn.sendMessage(from, { video: { url: fb.result.hd }, mimetype: "video/mp4", caption: `✅ Downloaded as *HD*` }, { quoted: mek });
   }
-
   if (quality === "audio" && (fb.result.sd || fb.result.hd)) {
     let audioUrl = fb.result.hd || fb.result.sd;
-    return conn.sendMessage(from, {
-      audio: { url: audioUrl },
-      mimetype: "audio/mpeg",
-      caption: `✅ Downloaded as *Audio Only*`
-    }, { quoted: mek });
+    return conn.sendMessage(from, { audio: { url: audioUrl }, mimetype: "audio/mpeg", caption: `✅ Downloaded as *Audio*` }, { quoted: mek });
   }
-
   reply("❌ Option not available.");
 });
 
-// Reply number handler
-conn.ev.on("messages.upsert", async ({ messages }) => {
-  let msg = messages[0];
-  if (!msg.message || !msg.message.conversation) return;
-  let body = msg.message.conversation.trim();
+// -------- REPLY NUMBER HANDLER --------
+cmd({
+  pattern: ".*",
+  dontAddCommandList: true,
+  filename: __filename
+}, async (conn, mek, m, { body, from }) => {
+  if (!body || !mek.message?.extendedTextMessage?.contextInfo?.stanzaId) return;
 
-  if (global.fbDlSessions && global.fbDlSessions[msg.key.remoteJid]) {
-    let sess = global.fbDlSessions[msg.key.remoteJid];
-    let choice = parseInt(body);
-    let { result } = sess;
+  let replyId = mek.message.extendedTextMessage.contextInfo.stanzaId;
+  let sess = global.fbDlSessions[replyId];
+  if (!sess) return;
 
-    if (choice === 1 && result.sd) {
-      await conn.sendMessage(sess.from, { video: { url: result.sd }, mimetype: "video/mp4", caption: `✅ Downloaded as *SD*` }, { quoted: msg });
-    } else if ((choice === 2 && result.hd) || (choice === 2 && !result.hd)) {
-      await conn.sendMessage(sess.from, { video: { url: result.hd || result.sd }, mimetype: "video/mp4", caption: `✅ Downloaded as *HD*` }, { quoted: msg });
-    } else {
-      await conn.sendMessage(sess.from, { audio: { url: result.hd || result.sd }, mimetype: "audio/mpeg", caption: `✅ Downloaded as *Audio*` }, { quoted: msg });
-    }
+  const fb = await fetchJson(`${api}/download/fbdown?url=${encodeURIComponent(sess.url)}`);
+  let choice = parseInt(body);
 
-    delete global.fbDlSessions[msg.key.remoteJid];
+  if (choice === 1 && fb.result.sd) {
+    await conn.sendMessage(from, { video: { url: fb.result.sd }, mimetype: "video/mp4", caption: "✅ Downloaded as *SD*" }, { quoted: mek });
+  } else if (choice === 2 && fb.result.hd) {
+    await conn.sendMessage(from, { video: { url: fb.result.hd }, mimetype: "video/mp4", caption: "✅ Downloaded as *HD*" }, { quoted: mek });
+  } else {
+    await conn.sendMessage(from, { audio: { url: fb.result.hd || fb.result.sd }, mimetype: "audio/mpeg", caption: "✅ Downloaded as *Audio*" }, { quoted: mek });
   }
+
+  delete global.fbDlSessions[replyId];
 });
