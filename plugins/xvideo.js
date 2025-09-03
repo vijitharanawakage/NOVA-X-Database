@@ -30,7 +30,7 @@ cmd({
     }
 
     // only show first 5
-    const sliced = results.slice(0, 15);
+    const sliced = results.slice(0, 35);
 
     let textMsg = `🔞 𝐍ᴏᴠᴀ-𝐗 18+ 𝐕ɪᴅᴇ𝐎 𝐒ᴇᴀʀᴄʜ𝐇 📥\n\n`;
     textMsg += `~*Search Results For:*~ ${query}\n\n`;
