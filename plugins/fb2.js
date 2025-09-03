@@ -1,92 +1,110 @@
-const { cmd } = require("../lib/command");
-const { fetchJson } = require("../lib/functions");
+const { cmd } = require('../lib/command');
+const config = require('../settings');
+const { fetchJson } = require('../lib/functions');
+
 const api = `https://nethu-api-ashy.vercel.app`;
 
-// session store for reply/button
-let fbSessions = {};
-
+// ================== MAIN COMMAND ==================
 cmd({
-  pattern: "facebook2",
-  alias: ["fbb2", "fbvideo2", "fb2"],
+  pattern: "facebook",
+  alias: ["fb", "fbb", "fbvideo"],
   react: "🎥",
-  desc: "Download videos from Facebook (SD / HD / Audio)",
+  desc: "Download videos from Facebook",
   category: "download",
-  use: ".facebook2 <facebook_url>",
-  filename: __filename,
-}, async (conn, mek, m, { from, q, reply }) => {
+  use: ".facebook <url>",
+  filename: __filename
+},
+async (conn, mek, m, { from, q, reply }) => {
   try {
-    if (!q) return reply("🚩 Please give me a Facebook URL");
-
-    const fb = await fetchJson(`${api}/download/fbdown?url=${encodeURIComponent(q)}`);
-    if (!fb.result || (!fb.result.sd && !fb.result.hd)) {
-      return reply("❌ I couldn't find any downloadable video.");
+    if (!q || !q.startsWith("http")) {
+      return reply("🚩 Please provide a valid Facebook URL.");
     }
 
-    // save session
-    fbSessions[from] = {
-      sd: fb.result.sd || null,
-      hd: fb.result.hd || null,
-      audio: fb.result.audio || fb.result.hd || fb.result.sd, // fallback
-    };
+    await conn.sendMessage(from, { react: { text: "⏳", key: mek.key } });
 
-    let caption = `*🖥️ KSMd Facebook DL*\n\n📝 Title: Facebook Video\n🔗 URL: ${q}\n\nSelect a format:\n1. 📺 SD Video\n2. 🎬 HD Video\n3. 🎵 Audio Only`;
+    const fb = await fetchJson(`${api}/download/fbdown?url=${encodeURIComponent(q)}`);
 
+    if (!fb.result || (!fb.result.sd && !fb.result.hd)) {
+      return reply("❌ Couldn't fetch download links.");
+    }
+
+    let caption = `*🖥️ KSMD Facebook Downloader*
+
+🔗 URL: ${q}
+📌 Select a format:`;
+
+    // Buttons
+    const buttons = [];
+    if (fb.result.sd) {
+      buttons.push({ buttonId: `.fbdl sd ${q}`, buttonText: { displayText: "📥 SD QUALITY" }, type: 1 });
+    }
+    if (fb.result.hd) {
+      buttons.push({ buttonId: `.fbdl hd ${q}`, buttonText: { displayText: "🎥 HD QUALITY" }, type: 1 });
+    }
+
+    // Send thumbnail + caption + buttons + number options
     await conn.sendMessage(from, {
       image: { url: fb.result.thumb },
-      caption: caption,
-      footer: "KSMd Facebook Downloader",
-      buttons: [
-        { buttonId: "fb:sd", buttonText: { displayText: "📺 SD Video" }, type: 1 },
-        { buttonId: "fb:hd", buttonText: { displayText: "🎬 HD Video" }, type: 1 },
-        { buttonId: "fb:audio", buttonText: { displayText: "🎵 Audio Only" }, type: 1 },
-      ],
-      headerType: 4,
+      caption: caption + `\n\n1. 📥 SD Quality\n2. 🎥 HD Quality\n\n_Reply with 1 or 2 too_`,
+      footer: "Powered by KSMD",
+      buttons,
+      headerType: 4
     }, { quoted: mek });
+
+    // Save session for reply
+    global.fbSessions = global.fbSessions || {};
+    global.fbSessions[from] = { url: q, sd: fb.result.sd, hd: fb.result.hd };
 
   } catch (err) {
     console.error(err);
-    reply("❌ Error while processing Facebook video.");
+    reply("❌ Error fetching video.");
   }
 });
 
-// handle button clicks & number replies
+// ================== HANDLE BUTTON COMMAND ==================
 cmd({
-  on: "message",
-  fromMe: false,
-}, async (conn, mek) => {
+  pattern: "fbdl",
+  desc: "Download selected Facebook format",
+  category: "download",
+  filename: __filename
+},
+async (conn, mek, m, { args, from, reply }) => {
   try {
-    const from = mek.key.remoteJid;
-    if (!fbSessions[from]) return;
-    const session = fbSessions[from];
+    const type = args[0];
+    const url = args[1];
+    if (!url) return reply("❌ Invalid request.");
 
-    let choice = null;
+    const fb = await fetchJson(`${api}/download/fbdown?url=${encodeURIComponent(url)}`);
 
-    // -------- Button Response --------
-    if (mek.message.buttonsResponseMessage) {
-      choice = mek.message.buttonsResponseMessage.selectedButtonId.split(":")[1];
+    if (type === "sd" && fb.result.sd) {
+      await conn.sendMessage(from, { video: { url: fb.result.sd }, caption: "📥 *SD Quality*" }, { quoted: mek });
+    } else if (type === "hd" && fb.result.hd) {
+      await conn.sendMessage(from, { video: { url: fb.result.hd }, caption: "🎥 *HD Quality*" }, { quoted: mek });
+    } else {
+      reply("❌ Format not available.");
     }
-
-    // -------- Number Reply --------
-    if (mek.message.conversation || mek.message.extendedTextMessage) {
-      const text = mek.message.conversation || mek.message.extendedTextMessage?.text || "";
-      if (text.trim() === "1") choice = "sd";
-      if (text.trim() === "2") choice = "hd";
-      if (text.trim() === "3") choice = "audio";
-    }
-
-    if (!choice) return;
-
-    if (choice === "sd" && session.sd) {
-      await conn.sendMessage(from, { video: { url: session.sd }, mimetype: "video/mp4", caption: "✅ Downloaded as *SD Quality*" }, { quoted: mek });
-    } else if (choice === "hd" && session.hd) {
-      await conn.sendMessage(from, { video: { url: session.hd }, mimetype: "video/mp4", caption: "✅ Downloaded as *HD Quality*" }, { quoted: mek });
-    } else if (choice === "audio" && session.audio) {
-      await conn.sendMessage(from, { audio: { url: session.audio }, mimetype: "audio/mpeg", ptt: false }, { quoted: mek });
-    }
-
-    delete fbSessions[from]; // clear session
-
   } catch (err) {
-    console.error("FB Choice Error:", err);
+    console.error(err);
+    reply("❌ Error downloading.");
+  }
+});
+
+// ================== HANDLE NUMBER REPLY ==================
+cmd({
+  on: "message"
+}, async (conn, mek, m, { body, from }) => {
+  try {
+    if (!global.fbSessions || !global.fbSessions[from]) return;
+    const session = global.fbSessions[from];
+
+    if (body === "1" && session.sd) {
+      await conn.sendMessage(from, { video: { url: session.sd }, caption: "📥 *SD Quality*" }, { quoted: mek });
+      delete global.fbSessions[from];
+    } else if (body === "2" && session.hd) {
+      await conn.sendMessage(from, { video: { url: session.hd }, caption: "🎥 *HD Quality*" }, { quoted: mek });
+      delete global.fbSessions[from];
+    }
+  } catch (e) {
+    console.error(e);
   }
 });
