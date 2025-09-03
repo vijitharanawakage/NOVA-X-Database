@@ -49,6 +49,7 @@ cmd({
     await conn.sendMessage(m.chat, {
       text: textMsg,
       footer: "🔞 𝐍ᴏᴠᴀ-x 𝐌ᴅ 𝐗ᴠɪᴅᴇᴏ 𝐃ᴏᴡɴʟᴏᴀᴅᴇʀ\n\n> ву ѕαη∂єѕн внαѕнαηα χ ραтнυм мαℓѕαяα",
+      image: { url: "https://files.catbox.moe/h5k9j1.jpeg" },  
       title: "𝚂𝙴𝙻𝙴𝙲𝚃 𝙰 𝚅𝙸𝙳𝙴𝙾 𝚃𝙾 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳",
       buttonText: "ＲＥＳＵＬＴＳ",
       sections
