@@ -5,9 +5,9 @@ const api = `https://nethu-api-ashy.vercel.app`;
 global.fbDlSessions = global.fbDlSessions || {};
 
 cmd({
-  pattern: "facebook",
+  pattern: "facebook2",
   react: "🎥",
-  alias: ["fbb", "fbvideo", "fb"],
+  alias: ["fbb", "fbvideo2", "fb2"],
   desc: "Download videos from Facebook",
   category: "download",
   use: '.facebook <facebook_url>',
