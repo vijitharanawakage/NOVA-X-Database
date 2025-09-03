@@ -22,7 +22,7 @@ cmd({
       profilePicUrl = "https://i.ibb.co/tmD1Hqr/no-profile-picture.png"; // fallback
     }
 
-    const caption = `🖼️ *Profile Picture of Chat Owner!*\n\n>  *ɢᴇɴᴀʀᴀᴛᴇᴅ ʙʏ ɴᴏᴠᴀ-x- ᴍᴅ*`;
+    const caption = `🖼️ *Profile Picture of Chat Owner !*\n\n>  *ɢᴇɴᴀʀᴀᴛᴇᴅ ʙʏ ɴᴏᴠᴀ-x- ᴍᴅ*`;
 
     await conn.sendMessage(from, {
       image: { url: profilePicUrl },
