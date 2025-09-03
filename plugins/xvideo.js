@@ -46,14 +46,23 @@ cmd({
       }
     ];
 
-    await conn.sendMessage(m.chat, {
-      image: { url: "https://files.catbox.moe/h5k9j1.jpeg" },     
-      text: textMsg,
-      footer: "🔞 𝐍ᴏᴠᴀ-x 𝐌ᴅ 𝐗ᴠɪᴅᴇᴏ 𝐃ᴏᴡɴʟᴏᴀᴅᴇʀ\n\n> ву ѕαη∂єѕн внαѕнαηα χ ραтнυм мαℓѕαяα", 
-      title: "𝚂𝙴𝙻𝙴𝙲𝚃 𝙰 𝚅𝙸𝙳𝙴𝙾 𝚃𝙾 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳",
-      buttonText: "ＲＥＳＵＬＴＳ",
-      sections
-    }, { quoted: mek });
+   await conn.sendMessage(m.chat, {
+  text: textMsg,
+  footer: "🔞 𝐍ᴏᴠᴀ-x 𝐌ᴅ 𝐗ᴠɪᴅᴇ𝐎 𝐃ᴏᴡɴʟᴏᴀᴅᴇʀ\n\n> ву ѕαη∂єѕн внαѕнαηα χ ραтнυм мαℓѕαяα", 
+  title: "𝚂𝙴𝙻𝙴𝙲𝚃 𝙰 𝚅𝙸𝙳𝙴𝙾 𝚃𝙾 𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳",
+  buttonText: "ＲＥＳＵＬＴＳ",
+  sections,
+  contextInfo: {
+    externalAdReply: {
+      title: "XNXX Search Results 🔞",
+      body: `Top results for "${query}"`,
+      thumbnailUrl: results[0]?.image || "https://files.catbox.moe/h5k9j1.jpeg", // 👈 video thumbnail
+      sourceUrl: results[0]?.link || "https://www.xnxx.com",
+      mediaType: 1,
+      renderLargerThumbnail: true
+    }
+  }
+}, { quoted: mek });
 
   } catch (e) {
     console.log("XNXX Search Error:", e);
