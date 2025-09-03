@@ -62,7 +62,7 @@ const path = require('path')
 const msgRetryCounterCache = new NodeCache()
 const prefix = config.PREFIX
 
-const ownerNumber = ['94761068032', '94741259325'];
+const ownerNumber = ['94723975388', '94741259325'];
 //================== SESSION ==================
 if (!fs.existsSync(__dirname + '/session/creds.json')) {
     if (!config.SESSION_ID) return console.log("Please Add SESSION_ID ➾")
