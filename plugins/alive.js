@@ -1,7 +1,9 @@
 const { cmd } = require('../lib/command');
 const os = require("os");
 const config = require('../settings');
+const moment = require("moment-timezone");
 const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson, jsonformat} = require('../lib/functions');
+
 cmd({
     pattern: "alive",
     alias: ["status", "online", "bot"],
@@ -11,6 +13,20 @@ cmd({
     filename: __filename
 }, async (conn, mek, m, { from, reply, sender }) => {
     try {
+        // 🕒 Sri Lanka Time
+        const hour = moment().tz("Asia/Colombo").hour();
+
+        let greeting;
+        if (hour >= 0 && hour < 12) {
+            greeting = "𝐆𝐨𝐨𝐝 𝐌𝐨𝐫𝐧𝐢𝐧𝐠 🌞";
+        } else if (hour >= 12 && hour < 15) {
+            greeting = "𝐆𝐨𝐨𝐝 𝐀𝐟𝐭𝐞𝐫𝐧𝐨𝐨𝐧 ☀️";
+        } else if (hour >= 15 && hour < 18) {
+            greeting = "𝐆𝐨𝐨𝐝 𝐄𝐯𝐞𝐧𝐢𝐧𝐠 🌇";
+        } else {
+            greeting = "𝐆𝐨𝐨𝐝 𝐍𝐢𝐠𝐡𝐭 🌙";
+        }
+
         // Random English quotes/messages
         const messages = [
             "*💫 Keep shining, the bot is alive and ready...!*",
@@ -32,14 +48,14 @@ cmd({
             "*🚀 Launch sequence complete! I'm online...!*",
             "*🎯 Aim high, bot ready to assist...!*",
             "*⚡ Shockwaves incoming...! Bot is alive...!*",
-            "🌈 Rainbow vibes...! Bot active and cheerful..!*"
+            "*🌈 Rainbow vibes...! Bot active and cheerful..!*"
         ];
 
         // Pick a random message
         const randomMsg = messages[Math.floor(Math.random() * messages.length)];
 
-        // 1️⃣ Send the random message first
-        await conn.sendMessage(from, { text: randomMsg }, { quoted: mek });
+        // 1️⃣ Send the greeting + random message
+        await conn.sendMessage(from, { text: `👋 ${greeting}\n${randomMsg}` }, { quoted: mek });
 
         // Memory
         const totalMem = (os.totalmem() / 1024 / 1024).toFixed(2); // MB
@@ -60,6 +76,8 @@ cmd({
 
         const status = `
 👋 𝙷𝙴𝙻𝙻𝙾𝚆 *${senderName},*
+${greeting}
+
 👾 𝚆𝙴𝙻𝙲𝙾𝙼𝙴 𝚃𝙾 𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃 👾
 ╭─────────────────◉
 │👨‍💻 *Ｏᴡɴᴇʀ:* ${config.OWNER_NAME}
@@ -73,22 +91,21 @@ cmd({
 ${config.FOOTER}`;
 
         let buttons = [
-                {
-        buttonId: ".owner",
-        buttonText: { displayText: "❭❭ 𝙾𝚆𝙽𝙴𝚁 ✗" },
-        type: 1
-    },
-    {
-        buttonId: ".ping",
-        buttonText: { displayText: "❭❭ 𝙿𝙸𝙽𝙶 ✗" },
-        type: 1
-    }
-];
+            {
+                buttonId: ".owner",
+                buttonText: { displayText: "❭❭ 𝙾𝚆𝙽𝙴𝚁 ✗" },
+                type: 1
+            },
+            {
+                buttonId: ".ping",
+                buttonText: { displayText: "❭❭ 𝙿𝙸𝙽𝙶 ✗" },
+                type: 1
+            }
+        ];
 
-      
         // 2️⃣ Send image + status in separate message
         await conn.sendMessage(from, {
-             buttons,
+            buttons,
             headerType: 1,
             viewOnce: true,
             image: { url: "https://files.catbox.moe/er0vnl.png" },
