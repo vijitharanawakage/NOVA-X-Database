@@ -18,13 +18,13 @@ cmd({
 
         let greeting;
         if (hour >= 0 && hour < 12) {
-            greeting = "𝐆𝐨𝐨𝐝 𝐌𝐨𝐫𝐧𝐢𝐧𝐠 🌞";
+            greeting = "*┇ Ｇ𝙾𝙾𝙳 爪𝙾𝚁𝙽𝙸𝙽𝙶 🌞 ┇*";
         } else if (hour >= 12 && hour < 15) {
-            greeting = "𝐆𝐨𝐨𝐝 𝐀𝐟𝐭𝐞𝐫𝐧𝐨𝐨𝐧 ☀️";
+            greeting = "*┇ Ｇ𝙾𝙾𝙳 Ａ𝙵𝚃𝙴𝚁𝙽𝙾𝙾𝙽 ☀️ ┇*";
         } else if (hour >= 15 && hour < 18) {
-            greeting = "𝐆𝐨𝐨𝐝 𝐄𝐯𝐞𝐧𝐢𝐧𝐠 🌇";
+            greeting = "*┇ Ｇ𝙾𝙾𝙳 乇𝚅𝙴𝙽𝙸𝙽𝙶 🌇 ┇*";
         } else {
-            greeting = "𝐆𝐨𝐨𝐝 𝐍𝐢𝐠𝐡𝐭 🌙";
+            greeting = "*┇ Ｇ𝙾𝙾𝙳 Ｎ𝙸𝙶𝙷𝚃 🌙 ┇*";
         }
 
         // Random English quotes/messages
@@ -48,7 +48,7 @@ cmd({
             "*🚀 Launch sequence complete! I'm online...!*",
             "*🎯 Aim high, bot ready to assist...!*",
             "*⚡ Shockwaves incoming...! Bot is alive...!*",
-            "*🌈 Rainbow vibes...! Bot active and cheerful..!*"
+            "🌈 Rainbow vibes...! Bot active and cheerful..!*"
         ];
 
         // Pick a random message
