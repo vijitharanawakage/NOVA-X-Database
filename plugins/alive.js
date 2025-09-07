@@ -94,13 +94,13 @@ cmd({
 *╰──────────●●►*
 
 *╭──「 ɪɴꜰᴏ 」*
-*│👨‍💻 Ｏᴡɴᴇʀ: ${config.OWNER_NAME}*
-*│⚡ Ｖᴇʀꜱɪᴏɴ: 1.0.0*
-*│📝 Ｐʀᴇꜰɪx: [${config.PREFIX}]*
-*│📳 Ｍᴏᴅᴇ: [${config.MODE}]*
-*│💾 Ｒᴀᴍ: ${usedMem}MB / ${totalMem}MB*
-*│🖥️ Ｐʟᴀᴛꜰᴏʀᴍ : ${platform} (${arch})*
-*│⏱️ Ｕᴘᴛɪᴍᴇ : ${hours}ｈ ${minutes}ｍ ${seconds}ｓ*
+*│👨‍💻 Ｏᴡɴᴇʀ :* ${config.OWNER_NAME}
+*│⚡ Ｖᴇʀꜱɪᴏɴ :* 1.0.0
+*│📝 Ｐʀᴇꜰɪx :* [${config.PREFIX}]
+*│📳 Ｍᴏᴅᴇ :* [${config.MODE}]
+*│💾 Ｒᴀᴍ :* ${usedMem}MB / ${totalMem}MB
+*│🖥️ Ｐʟᴀᴛꜰᴏʀᴍ :* ${platform} (${arch})
+*│⏱️ Ｕᴘᴛɪᴍᴇ :* ${hours}ｈ ${minutes}ｍ ${seconds}ｓ
 *╰───────────●●►*
 ${config.FOOTER}`;
 
