@@ -1,45 +1,58 @@
-const { cmd } = require('../lib/command');
-const { downloadMediaMessage } = require('@whiskeysockets/baileys');
+const { cmd } = require("../command");
 
 cmd({
   pattern: "vv",
-  react: "👁️",
-  desc: "View once message unlocker",
-  category: "tools",
+  alias: ["viewonce", "onece"],
+  react: '🐳',
+  desc: "Owner Only - retrieve quoted message back to user",
+  category: "owner",
   filename: __filename
-},
-async (conn, mek, m, { reply }) => {
+}, async (client, message, match, { from }) => {
   try {
-    if (!m.quoted) return reply("⚠️ Reply to a *view once* message.");
+    if (!match.quoted) {
+      return await client.sendMessage(from, {
+        text: "*🍁 Please reply to a view once message!*"
+      }, { quoted: message });
+    }
 
-    let qmsg = m.quoted;
+    const buffer = await match.quoted.download();
+    const mtype = match.quoted.mtype;
+    const options = { quoted: message };
 
-    // check view once
-    let vmsg = qmsg.message?.viewOnceMessageV2?.message 
-            || qmsg.message?.viewOnceMessageV2Extension?.message;
-    if (!vmsg) return reply("⚠️ This is not a view once message.");
+    let messageContent = {};
+    switch (mtype) {
+      case "imageMessage":
+        messageContent = {
+          image: buffer,
+          caption: match.quoted.text || '',
+          mimetype: match.quoted.mimetype || "image/jpeg"
+        };
+        break;
+      case "videoMessage":
+        messageContent = {
+          video: buffer,
+          caption: match.quoted.text || '',
+          mimetype: match.quoted.mimetype || "video/mp4"
+        };
+        break;
+      case "audioMessage":
+        messageContent = {
+          audio: buffer,
+          mimetype: "audio/mp4",
+          ptt: match.quoted.ptt || false
+        };
+        break;
+      default:
+        return await client.sendMessage(from, {
+          text: "❌ Only image, video, and audio messages are supported"
+        }, { quoted: message });
+    }
 
-    let type = Object.keys(vmsg)[0]; // imageMessage / videoMessage / audioMessage
-    let msgObj = vmsg[type];
-    if (!msgObj) return reply("❌ Unsupported media type.");
-
-    // download buffer
-    let buffer = await downloadMediaMessage(
-      { message: vmsg },
-      "buffer",
-      {},
-      { reuploadRequest: conn.updateMediaMessage }
-    );
-
-    // caption if available
-    let caption = msgObj.caption ? msgObj.caption : "";
-    caption = "👁️ ViewOnce Unlocked\n\n" + caption;
-
-    // send back unlocked
-    await conn.sendMessage(m.chat, { [type]: buffer, caption }, { quoted: m });
-
-  } catch (e) {
-    console.error(e);
-    reply("❌ Error while unlocking view once message.");
+    await client.sendMessage(from, messageContent, options);
+  } catch (error) {
+    console.error("vv Error:", error);
+    await client.sendMessage(from, {
+      text: "❌ Error fetching vv message:\n" + error.message
+    }, { quoted: message });
   }
 });
