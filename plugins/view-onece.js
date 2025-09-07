@@ -1,58 +1,58 @@
-const { cmd } = require("../lib/command");
+const { cmd } = require('../lib/command');
+const { downloadMediaMessage } = require('@whiskeysockets/baileys');
 
 cmd({
   pattern: "vv",
-  alias: ["viewonce", "onece"],
-  react: '🐳',
-  desc: "Owner Only - retrieve quoted message back to user",
-  category: "owner",
+  react: "👁️",
+  desc: "Unlock view once photo/video/audio",
+  category: "tools",
   filename: __filename
-}, async (client, message, match, { from }) => {
+},
+async (conn, mek, m, { reply }) => {
   try {
-    if (!match.quoted) {
-      return await client.sendMessage(from, {
-        text: "*🍁 Please reply to a view once message!*"
-      }, { quoted: message });
+    if (!m.quoted) return reply("⚠️ Reply to a *view once* message.");
+
+    // Extract real view once message
+    let qmsg = m.quoted;
+    let vmsg = qmsg.message?.viewOnceMessageV2?.message 
+            || qmsg.message?.viewOnceMessageV2Extension?.message;
+
+    if (!vmsg) return reply("⚠️ This is not a view once message.");
+
+    // Detect media type
+    let type = Object.keys(vmsg)[0]; // imageMessage / videoMessage / audioMessage
+    let msgObj = vmsg[type];
+    if (!msgObj) return reply("❌ Unsupported or empty view once content.");
+
+    // Download media
+    let buffer = await downloadMediaMessage(
+      { message: vmsg },
+      "buffer",
+      {},
+      { reuploadRequest: conn.updateMediaMessage }
+    );
+
+    // Add caption if exists
+    let caption = msgObj.caption ? msgObj.caption : "";
+    if (caption.length > 0) {
+      caption = "👁️ ViewOnce Unlocked\n\n" + caption;
+    } else {
+      caption = "👁️ ViewOnce Unlocked";
     }
 
-    const buffer = await match.quoted.download();
-    const mtype = match.quoted.mtype;
-    const options = { quoted: message };
-
-    let messageContent = {};
-    switch (mtype) {
-      case "imageMessage":
-        messageContent = {
-          image: buffer,
-          caption: match.quoted.text || '',
-          mimetype: match.quoted.mimetype || "image/jpeg"
-        };
-        break;
-      case "videoMessage":
-        messageContent = {
-          video: buffer,
-          caption: match.quoted.text || '',
-          mimetype: match.quoted.mimetype || "video/mp4"
-        };
-        break;
-      case "audioMessage":
-        messageContent = {
-          audio: buffer,
-          mimetype: "audio/mp4",
-          ptt: match.quoted.ptt || false
-        };
-        break;
-      default:
-        return await client.sendMessage(from, {
-          text: "❌ Only image, video, and audio messages are supported"
-        }, { quoted: message });
+    // Send unlocked
+    if (type === "imageMessage") {
+      await conn.sendMessage(m.chat, { image: buffer, caption }, { quoted: m });
+    } else if (type === "videoMessage") {
+      await conn.sendMessage(m.chat, { video: buffer, caption }, { quoted: m });
+    } else if (type === "audioMessage") {
+      await conn.sendMessage(m.chat, { audio: buffer, mimetype: "audio/mp4" }, { quoted: m });
+    } else {
+      reply("⚠️ Only photo/video/audio view once supported.");
     }
 
-    await client.sendMessage(from, messageContent, options);
-  } catch (error) {
-    console.error("vv Error:", error);
-    await client.sendMessage(from, {
-      text: "❌ Error fetching vv message:\n" + error.message
-    }, { quoted: message });
+  } catch (e) {
+    console.error("VV Error:", e);
+    reply("❌ Error while unlocking view once message.");
   }
 });
