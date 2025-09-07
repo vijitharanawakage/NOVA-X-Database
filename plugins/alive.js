@@ -15,6 +15,8 @@ cmd({
     try {
         // 🕒 Sri Lanka Time
         const hour = moment().tz("Asia/Colombo").hour();
+        const date = moment().tz("Asia/Colombo").format("YYYY-MM-DD");  // 📅 Date
+        const time = moment().tz("Asia/Colombo").format("HH:mm:ss");   // ⏰ Time
 
         let greeting;
         if (hour >= 0 && hour < 12) {
@@ -24,7 +26,7 @@ cmd({
         } else if (hour >= 15 && hour < 18) {
             greeting = "*┇ Ｇ𝙾𝙾𝙳 乇𝚅𝙴𝙽𝙸𝙽𝙶 🌇 ┇*";
         } else {
-            greeting = "*┇ Ｇ𝙾𝙾𝙳 Ｎ𝙸𝙶𝙷𝚃 🌙 ┇*";
+            greeting = "*┇ Ｇ𝙾𝙾𝙳 Ｎ𝙸𝙶Ｈ𝚃 🌙 ┇*";
         }
 
         // Random English quotes/messages
@@ -48,10 +50,9 @@ cmd({
             "*🚀 Launch sequence complete! I'm online...!*",
             "*🎯 Aim high, bot ready to assist...!*",
             "*⚡ Shockwaves incoming...! Bot is alive...!*",
-            "🌈 Rainbow vibes...! Bot active and cheerful..!*"
+            "*🌈 Rainbow vibes...! Bot active and cheerful..!*"
         ];
 
-        // Pick a random message
         const randomMsg = messages[Math.floor(Math.random() * messages.length)];
 
         // 1️⃣ Send the greeting + random message
@@ -75,10 +76,22 @@ cmd({
         const senderName = m.pushName || "User"
 
         const status = `
-👋 𝙷𝙴𝙻𝙻𝙾𝚆 *${senderName},*
-${greeting}
+👋 𝙷𝙴𝙻𝙻𝙾𝚆 *${senderName}*,
 
-👾 𝚆𝙴𝙻𝙲𝙾𝙼𝙴 𝚃𝙾 𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃 👾
+*╭─「 > ᴜꜱᴇʀ 」*
+*│* *${senderName}*
+*╰──────────●●►*
+
+*╭─「 > ɢʀᴇᴇᴛɪɴɢ 」*
+*│* *${greeting}*
+*╰──────────●●►*
+
+*╭─「 > ᴅᴀᴛᴇ & ᴛɪᴍᴇ 」*
+*│*📅 *Ｄᴀᴛᴇ*: ${date}
+*│*⏰ *Ｔɪᴍᴇ*: ${time}
+*╰──────────●●►*
+
+👾 Ｗ𝙴𝙻𝙲𝙾𝙼𝙴 𝚃𝙾 𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃 👾
 ╭─────────────────◉
 │👨‍💻 *Ｏᴡɴᴇʀ:* ${config.OWNER_NAME}
 │⚡ *Ｖᴇʀꜱɪᴏɴ:* 1.0.0
