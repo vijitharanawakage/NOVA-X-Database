@@ -1,40 +1,36 @@
 const fs = require("fs");
 const path = require("path");
+const { cmd } = require("../lib/command");
 
 let voiceMap = {};
 try {
     voiceMap = JSON.parse(fs.readFileSync(path.join(__dirname, "../assets/autovoice.json")));
+    console.log("✅ autovoice.json loaded");
 } catch (e) {
-    console.error("⚠️ autovoice.json not found or invalid JSON!");
+    console.error("❌ autovoice.json load error:", e.message);
     voiceMap = {};
 }
 
-const { cmd } = require("../lib/command");
-
 cmd({
-    on: "text" // all text messages
+    on: "text"
 }, async (conn, mek, m) => {
-    try {
-        const body = (m.text || "").toLowerCase(); // user message (lowercase)
-        if (!body) return;
+    const text = (m.text || "").toLowerCase();
+    if (!text) return;
 
-        for (const key in voiceMap) {
-            if (body.includes(key.toLowerCase())) {
-                const filePath = path.join(__dirname, "../assets", voiceMap[key]);
-                if (fs.existsSync(filePath)) {
-                    await conn.sendMessage(m.chat, {
-                        audio: { url: filePath },
-                        mimetype: "audio/mpeg",
-                        ptt: true // send as voice note
-                    }, { quoted: mek });
-                    console.log(`✅ AutoVoice sent: ${voiceMap[key]} for keyword "${key}"`);
-                    return;
-                } else {
-                    console.log(`⚠️ File not found: ${filePath}`);
-                }
+    for (const key in voiceMap) {
+        if (text.includes(key.toLowerCase())) {
+            const file = path.join(__dirname, "../assets", voiceMap[key]);
+            if (fs.existsSync(file)) {
+                await conn.sendMessage(m.chat, {
+                    audio: { url: file },
+                    mimetype: "audio/mpeg",
+                    ptt: true
+                }, { quoted: mek });
+                console.log(`🎤 Sent voice for "${key}" → ${voiceMap[key]}`);
+            } else {
+                console.log(`⚠️ Missing file: ${file}`);
             }
+            break;
         }
-    } catch (err) {
-        console.error("❌ Voice Plugin Error:", err);
     }
 });
