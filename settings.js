@@ -14,6 +14,6 @@ BUTTON: process.env.BUTTON || 'true',
 AUTO_REPLY: process.env.AUTO_REPLY || 'true',
 AUTO_BIO: process.env.AUTO_BIO || 'true',
 OWNER_NAME: process.env.OWNER_NAME || '_Mr Unknown X Luxalgo_',
-OWNER_NUMBER: (process.env.OWNER_NUMBER || '94741259325,94723975388').split(',')
+OWNER_NUMBER: process.env.OWNER_NUMBER || '94723975388',
 AUTO_READ_STATUS: process.env.AUTO_READ_STATUS === undefined ?"true" : process.env.AUTO_READ_STATUS
 };
