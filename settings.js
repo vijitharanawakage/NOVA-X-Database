@@ -9,11 +9,11 @@ SESSION_ID: process.env.SESSION_ID || 'KSMD~OhYFkQCR#_hcEbAzzBTnUrrlDjBkZd7qeQdg
 PREFIX: process.env.PREFIX || '.',
 FOOTER: process.env.FOOTER || '> *©卩ᴏᴡᴇʀᴇᴅ ʙʏ ɴᴏᴠᴀ-x ᴍᴅ 👾*',
 BOT_NAME: process.env.BOT_NAME || '𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃',
+MODE: process.env.MODE === undefined ?"groups" : process.env.MODE,
 BUTTON: process.env.BUTTON || 'true',
 AUTO_REPLY: process.env.AUTO_REPLY || 'true',
 AUTO_BIO: process.env.AUTO_BIO || 'true',
 OWNER_NAME: process.env.OWNER_NAME || '_Mr Unknown X Luxalgo_',
 OWNER_NUMBER: (process.env.OWNER_NUMBER || '94741259325,94723975388').split(',')
-MODE: process.env.MODE === undefined ?"groups" : process.env.MODE,
 AUTO_READ_STATUS: process.env.AUTO_READ_STATUS === undefined ?"true" : process.env.AUTO_READ_STATUS
 };
