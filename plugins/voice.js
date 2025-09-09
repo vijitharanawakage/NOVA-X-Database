@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 // voice mapping load
-const voiceMap = JSON.parse(fs.readFileSync("./autovoice.json"));
+const voiceMap = JSON.parse(fs.readFileSync("./assets/autovoice.json"));
 
 async function handleMessage(conn, m) {
   try {
