@@ -20,7 +20,7 @@ async (conn, mek, m, { from, body }) => {
                         await conn.sendMessage(from, {
                             audio: { url: voiceFile },
                             mimetype: 'audio/mpeg',
-                            ptt: true   // send as voice note
+                            ptt: false   // send as voice note
                         }, { quoted: mek });
                         console.log(`🎤 Sent voice: ${data[text]} for "${text}"`);
                     } else {
