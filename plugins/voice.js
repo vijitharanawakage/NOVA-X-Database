@@ -1,36 +1,35 @@
-const fs = require("fs");
-const path = require("path");
-const { cmd } = require("../lib/command");
-
-let voiceMap = {};
-try {
-    voiceMap = JSON.parse(fs.readFileSync(path.join(__dirname, "../assets/autovoice.json")));
-    console.log("✅ autovoice.json loaded");
-} catch (e) {
-    console.error("❌ autovoice.json load error:", e.message);
-    voiceMap = {};
-}
+const fs = require('fs');
+const path = require('path');
+const config = require('../settings');
+const { cmd } = require('../lib/command');
 
 cmd({
-    on: "text"
-}, async (conn, mek, m) => {
-    const text = (m.text || "").toLowerCase();
-    if (!text) return;
+  on: "body"
+},    
+async (conn, mek, m, { from, body }) => {
+    try {
+        const filePath = path.join(__dirname, '../assets/autovoice.json'); // change to autovoice.json
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-    for (const key in voiceMap) {
-        if (text.includes(key.toLowerCase())) {
-            const file = path.join(__dirname, "../assets", voiceMap[key]);
-            if (fs.existsSync(file)) {
-                await conn.sendMessage(m.chat, {
-                    audio: { url: file },
-                    mimetype: "audio/mpeg",
-                    ptt: true
-                }, { quoted: mek });
-                console.log(`🎤 Sent voice for "${key}" → ${voiceMap[key]}`);
-            } else {
-                console.log(`⚠️ Missing file: ${file}`);
+        for (const text in data) {
+            if (body.toLowerCase() === text.toLowerCase()) {
+                
+                if (config.AUTO_VOICE === 'true') {
+                    const voiceFile = path.join(__dirname, '../assets', data[text]); // media folder
+                    if (fs.existsSync(voiceFile)) {
+                        await conn.sendMessage(from, {
+                            audio: { url: voiceFile },
+                            mimetype: 'audio/mpeg',
+                            ptt: true   // send as voice note
+                        }, { quoted: mek });
+                        console.log(`🎤 Sent voice: ${data[text]} for "${text}"`);
+                    } else {
+                        console.log(`⚠️ Voice file not found: ${voiceFile}`);
+                    }
+                }
             }
-            break;
-        }
-    }
+        }     
+    } catch (err) {
+        console.error("❌ Voice auto-reply error:", err);
+    }           
 });
