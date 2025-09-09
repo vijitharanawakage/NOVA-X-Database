@@ -4,6 +4,23 @@ const config = require('../settings');
 const moment = require("moment-timezone");
 const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson, jsonformat} = require('../lib/functions');
 
+const qMessage = {
+  key: {
+    fromMe: false,
+    remoteJid: "status@broadcast",
+    participant: "0@s.whatsapp.net",
+  },
+  message: {
+    contactMessage: {
+      displayName: "𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃",
+      vcard: `BEGIN:VCARD
+VERSION:3.0
+FN:𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃
+TEL:+94773416478
+END:VCARD`
+    }
+  }
+};
 cmd({
     pattern: "alive",
     alias: ["status", "online", "bot"],
@@ -134,7 +151,7 @@ ${config.FOOTER}`;
                     serverMessageId: 143
                 }
             }
-        }, { quoted: mek });
+        }, { quoted: qMessage });
 
     } catch (e) {
         console.error("Alive Error:", e);
