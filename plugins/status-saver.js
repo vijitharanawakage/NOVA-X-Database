@@ -1,8 +1,8 @@
 const { cmd } = require("../lib/command");
 
 cmd({
-  pattern: /^send$/i, // ✅ regex pattern, prefix අවශ්‍ය නැහැ
-  alias: ["sendme", 'save', 'evpn', 'Ewhm', 'Evapan', 'dapan', 'Dapan', 'dpn'].map(a => new RegExp(`^${a}$`, 'i')), // aliases without prefix
+  pattern: "send",
+  alias: ["sendme", 'save', 'evpn', 'Ewhm', 'Evapan', 'dapan', 'Dapan', 'dpn'],
   react: '📤',
   desc: "Forwards quoted message back to user",
   category: "utility",
