@@ -16,6 +16,7 @@ BUTTON: process.env.BUTTON || 'true',
 AUTO_REPLY: process.env.AUTO_REPLY || 'true',
 AUTO_VOICE: process.env.AUTO_VOICE || 'true',    
 AUTO_BIO: process.env.AUTO_BIO || 'true',
+AUTO_RECORDING: process.env.AUTO_RECORDING || 'true',
 OWNER_NAME: process.env.OWNER_NAME || '_Mr Unknown X Luxalgo_',
 OWNER_NUMBER: process.env.OWNER_NUMBER || ['94723975388','94741259325'],
 AUTO_READ_STATUS: process.env.AUTO_READ_STATUS === undefined ?"true" : process.env.AUTO_READ_STATUS
