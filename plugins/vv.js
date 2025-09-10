@@ -1,5 +1,6 @@
 const { cmd } = require("../lib/command");
 const { downloadMediaMessage } = require("@whiskeysockets/baileys");
+const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson, jsonformat} = require('../lib/functions');
 
 cmd({
   pattern: "vv",
