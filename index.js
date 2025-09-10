@@ -198,7 +198,7 @@ mek.message = (getContentType(mek.message) === 'ephemeralMessage') ? mek.message
 if (mek.key && mek.key.remoteJid === 'status@broadcast' && config.AUTO_READ_STATUS === "true"){
 await conn.readMessages([mek.key])  
 const mnyako = await jidNormalizedUser(conn.user.id)
-await conn.sendMessage(mek.key.remoteJid, { react: { key: mek.key, text: '🎉'}}, { statusJidList: [mek.key.participant, mnyako] })
+await conn.sendMessage(mek.key.remoteJid, { react: { key: mek.key, text: 'config.AUTO_STATUS_REACT'}}, { statusJidList: [mek.key.participant, mnyako] })
 }	      
 	    if (mek.key && mek.key.remoteJid === 'status@broadcast') return
             const m = sms(conn, mek)
