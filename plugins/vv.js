@@ -1,67 +1,54 @@
 const { cmd } = require("../lib/command");
 const { downloadMediaMessage } = require("@whiskeysockets/baileys");
-const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson, jsonformat} = require('../lib/functions');
 
 cmd({
   pattern: "vv",
-  alias: ["viewonce", 'retrive'],
-  react: '🐳',
-  desc: "Owner Only - retrieve quoted message back to user",
+  alias: ["viewonce", "retrieve"],
+  react: "🐳",
+  desc: "Owner Only - retrieve quoted view once message",
   category: "owner",
-  filename: __filename
+  filename: __filename,
 }, async (client, message, match, { from, isCreator }) => {
   try {
     if (!isCreator) {
-      return await client.sendMessage(from, {
-        text: "*📛 This is an owner command.*"
-      }, { quoted: message });
+      return await client.sendMessage(from, { text: "📛 This is an *owner only* command." }, { quoted: message });
     }
 
-    if (!match.quoted) {
-      return await client.sendMessage(from, {
-        text: "*🍁 Please reply to a view once message!*"
-      }, { quoted: message });
+    if (!message.quoted) {
+      return await client.sendMessage(from, { text: "🍁 Please reply to a *view once* message!" }, { quoted: message });
     }
 
-    const buffer = await match.quoted.download();
-    const mtype = match.quoted.mtype;
-    const options = { quoted: message };
+    let quoted = message.quoted;
+    let viewOnceMsg = quoted.msg?.viewOnceMessageV2 || quoted.msg?.viewOnceMessageV2Extension;
 
-    let messageContent = {};
-    switch (mtype) {
-      case "imageMessage":
-        messageContent = {
-          image: buffer,
-          caption: match.quoted.text || '',
-          mimetype: match.quoted.mimetype || "image/jpeg"
-        };
-        break;
-      case "videoMessage":
-        messageContent = {
-          video: buffer,
-          caption: match.quoted.text || '',
-          mimetype: match.quoted.mimetype || "video/mp4"
-        };
-        break;
-      case "audioMessage":
-        messageContent = {
-          audio: buffer,
-          mimetype: "audio/mp4",
-          ptt: match.quoted.ptt || false
-        };
-        break;
-      default:
-        return await client.sendMessage(from, {
-          text: "❌ Only image, video, and audio messages are supported"
-        }, { quoted: message });
+    if (!viewOnceMsg) {
+      return await client.sendMessage(from, { text: "❌ That’s not a *view once* message." }, { quoted: message });
     }
 
-    await client.sendMessage(from, messageContent, options);
+    const realMsg = viewOnceMsg.message;
+    const mtype = Object.keys(realMsg)[0]; // imageMessage / videoMessage
+
+    const buffer = await downloadMediaMessage(
+      { message: realMsg },
+      "buffer",
+      {},
+      { logger: client.logger, reuploadRequest: client.updateMediaMessage }
+    );
+
+    if (!buffer) {
+      return await client.sendMessage(from, { text: "❌ Failed to retrieve media." }, { quoted: message });
+    }
+
+    if (mtype === "imageMessage") {
+      await client.sendMessage(from, { image: buffer, caption: "🔓 Unlocked ViewOnce Image" }, { quoted: message });
+    } else if (mtype === "videoMessage") {
+      await client.sendMessage(from, { video: buffer, caption: "🔓 Unlocked ViewOnce Video" }, { quoted: message });
+    } else {
+      await client.sendMessage(from, { text: "❌ Only image/video view once supported." }, { quoted: message });
+    }
+
   } catch (error) {
     console.error("vv Error:", error);
-    await client.sendMessage(from, {
-      text: "❌ Error fetching vv message:\n" + error.message
-    }, { quoted: message });
+    await client.sendMessage(from, { text: "❌ Error fetching vv:\n" + error.message }, { quoted: message });
   }
 });
-
