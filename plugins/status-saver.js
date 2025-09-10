@@ -1,58 +1,48 @@
 const { cmd } = require("../lib/command");
 
 cmd({
-  pattern: "send",
-  alias: ["sendme", 'save', 'evpn', 'Ewhm', 'Evapan', 'dapan', 'Dapan', 'dpn'],
+  pattern: "send", // .send ලෙස prefix trigger
+  alias: ["sendme", "save", "evpn", "Ewhm", "Evapan", "dapan", "Dapan", "dpn"],
   react: '📤',
-  desc: "Forwards quoted message back to user",
+  desc: "Forwards quoted message or status/story back to user",
   category: "utility",
   filename: __filename
 }, async (client, message, match, { from }) => {
   try {
     if (!match.quoted) {
       return await client.sendMessage(from, {
-        text: "*🍁 𝐏ʟᴇᴀꜱᴇ 𝐑ᴇᴘʟʏ 𝐓ᴏ 𝐀 𝐌ᴇꜱꜱᴀɢᴇ...!*"
+        text: "*🍁 𝐏ʟᴇᴀꜱᴇ 𝐑ᴇᴘʟʏ 𝐓ᴏ 𝐀 𝐌ᴇꜱꜱᴀɢᴇ / 𝐒ᴛᴀᴛᴜs ...!*"
       }, { quoted: message });
     }
 
-    const buffer = await match.quoted.download();
-    const mtype = match.quoted.mtype;
+    const quoted = match.quoted;
+    const mtype = quoted.mtype;
     const options = { quoted: message };
-
     let messageContent = {};
-    switch (mtype) {
-      case "imageMessage":
-        messageContent = {
-          image: buffer,
-          caption: match.quoted.text || '',
-          mimetype: match.quoted.mimetype || "image/jpeg"
-        };
-        break;
-      case "videoMessage":
-        messageContent = {
-          video: buffer,
-          caption: match.quoted.text || '',
-          mimetype: match.quoted.mimetype || "video/mp4"
-        };
-        break;
-      case "audioMessage":
-        messageContent = {
-          audio: buffer,
-          mimetype: "audio/mp4",
-          ptt: match.quoted.ptt || false
-        };
-        break;
-      default:
-        return await client.sendMessage(from, {
-          text: "❌ Only image, video, and audio messages are supported"
-        }, { quoted: message });
+
+    // ✅ Status (view once) or normal media
+    if ((mtype === "imageMessage" || mtype === "videoMessage") && quoted.download) {
+      const buffer = await quoted.download();
+      messageContent = mtype === "imageMessage"
+        ? { image: buffer, caption: quoted.text || '', mimetype: quoted.mimetype || "image/jpeg" }
+        : { video: buffer, caption: quoted.text || '', mimetype: quoted.mimetype || "video/mp4" };
+    } 
+    else if (mtype === "viewOnceMessage" && quoted.viewOnceMessage?.message) {
+      const inner = quoted.viewOnceMessage.message;
+      const innerType = Object.keys(inner)[0]; // imageMessage / videoMessage
+      const buffer = await inner[innerType].download();
+      messageContent = innerType === "imageMessage"
+        ? { image: buffer, caption: inner[innerType].caption || '', mimetype: "image/jpeg" }
+        : { video: buffer, caption: inner[innerType].caption || '', mimetype: "video/mp4" };
+    } 
+    else {
+      return await client.sendMessage(from, { text: "❌ Only image/video/status messages are supported!" }, { quoted: message });
     }
 
     await client.sendMessage(from, messageContent, options);
+
   } catch (error) {
-    console.error("Forward Error:", error);
-    await client.sendMessage(from, {
-      text: "❌ Error forwarding message:\n" + error.message
-    }, { quoted: message });
+    console.error("Send Command Error:", error);
+    await client.sendMessage(from, { text: "❌ Error forwarding/downloading message:\n" + error.message }, { quoted: message });
   }
 });
