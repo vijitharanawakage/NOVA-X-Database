@@ -7,7 +7,7 @@ module.exports = {
 
 SESSION_ID: process.env.SESSION_ID || 'KSMD~OhYFkQCR#_hcEbAzzBTnUrrlDjBkZd7qeQdg8TaOxVHi5H9igZew',
 PREFIX: process.env.PREFIX || '.',
-ALIVE_IMG: process.env.ALIVE_IMG || 'true',   
+ALIVE_IMG: process.env.ALIVE_IMG || 'https://files.catbox.moe/er0vnl.png',   
 FOOTER: process.env.FOOTER || '> *©卩ᴏᴡᴇʀᴇᴅ ʙʏ ɴᴏᴠᴀ-x ᴍᴅ 👾*',
 BOT_NAME: process.env.BOT_NAME || '𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃',
 MODE: process.env.MODE === undefined ?"groups" : process.env.MODE,
