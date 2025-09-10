@@ -16,7 +16,7 @@ const qMessage = {
       vcard: `BEGIN:VCARD
 VERSION:3.0
 FN:𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃
-TEL:+94773416478
+TEL:+94741259325
 END:VCARD`
     }
   }
