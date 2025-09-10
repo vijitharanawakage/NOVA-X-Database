@@ -17,7 +17,8 @@ AUTO_VOICE: process.env.AUTO_VOICE || 'true',
 AUTO_BIO: process.env.AUTO_BIO || 'true',
 OWNER_NAME: process.env.OWNER_NAME || '_Mr Unknown X Luxalgo_',
 OWNER_NUMBER: process.env.OWNER_NUMBER || '94723975388',
-AUTO_STATUS_REACT: process.env.AUTO_STATUS_REACT || '❤️',    
+AUTO_STATUS_REACT: process.env.AUTO_STATUS_REACT || 'true',
+AUTO_STATUS_IMOJI: process.env.AUTO_STATUS_IMOJI || '❤️',  
 AUTO_READ_STATUS: process.env.AUTO_READ_STATUS === undefined ?"true" : process.env.AUTO_READ_STATUS
 };
 
