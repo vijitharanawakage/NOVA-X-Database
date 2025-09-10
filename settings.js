@@ -19,4 +19,4 @@ OWNER_NAME: process.env.OWNER_NAME || '_Mr Unknown X Luxalgo_',
 OWNER_NUMBER: process.env.OWNER_NUMBER || '94723975388',
 AUTO_READ_STATUS: process.env.AUTO_READ_STATUS === undefined ?"true" : process.env.AUTO_READ_STATUS
 };
-ALIVE_IMG
+
