@@ -7,7 +7,7 @@ cmd({
     pattern: "img",
     alias: ["image", "googleimage", "searchimg"],
     react: "🦋",
-    desc: "Search and download Google images with pagination",
+    desc: "Search and download Google images with pagination (HD quality)",
     category: "fun",
     use: ".img <keywords> [page]",
     filename: __filename
@@ -17,12 +17,12 @@ cmd({
             return reply("🖼️ Usage: *.img <query> [page]*\nExample: *.img cute cats 2*");
         }
 
-        // query + page
+        // Query + page
         const query = args.slice(0, -1).join(" ") || args.join(" ");
         const pageArg = args[args.length - 1];
         const page = isNaN(pageArg) ? 1 : parseInt(pageArg);
 
-        await reply(`> 🔍 Searching Google Images for *${query}* (Page ${page}) ...`);
+        await reply(`> 🔍 Searching *HD Google Images* for *${query}* (Page ${page}) ...`);
 
         const url = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}&start=${(page - 1) * 20}`;
 
@@ -35,29 +35,33 @@ cmd({
         const $ = cheerio.load(data);
         let images = [];
 
-        // Try HD links first
-        $("img").each((i, el) => {
-            let imgUrl = $(el).attr("data-iurl") || $(el).attr("data-src");
-            if (imgUrl && imgUrl.startsWith("http")) {
-                images.push(imgUrl);
+        // Scrape JSON script block (contains HD image URLs)
+        $("script").each((i, el) => {
+            const scriptContent = $(el).html();
+            if (scriptContent && scriptContent.includes("AF_initDataCallback")) {
+                const matches = scriptContent.match(/"(https?:\/\/[^"]*\.(jpg|png|jpeg))"/g);
+                if (matches) {
+                    matches.forEach(url => {
+                        url = url.replace(/"/g, "");
+                        if (url && url.startsWith("http")) images.push(url);
+                    });
+                }
             }
         });
 
-        // Fallback if no HD
+        // fallback if no JSON-based URLs
         if (images.length === 0) {
             $("img").each((i, el) => {
-                let fallbackUrl = $(el).attr("src");
-                if (fallbackUrl && fallbackUrl.startsWith("http")) {
-                    images.push(fallbackUrl);
-                }
+                let imgUrl = $(el).attr("data-iurl") || $(el).attr("src");
+                if (imgUrl && imgUrl.startsWith("http")) images.push(imgUrl);
             });
         }
 
         if (images.length === 0) {
-            return reply("❌ No images found. Try again.");
+            return reply("❌ No HD images found. Try again with another keyword.");
         }
 
-        // Pick 10 images for current page
+        // Pick 10 results
         const selected = images.slice(0, 10);
 
         for (const imageUrl of selected) {
@@ -65,14 +69,14 @@ cmd({
                 from,
                 {
                     image: { url: imageUrl },
-                    caption: `📷 𝚁𝚎𝚜𝚞𝚕𝚝 𝚏𝚘𝚛: *${query}*\n📄 Page: ${page}\n\n${config.FOOTER}`
+                    caption: `📷 *Result for:* ${query}\n📄 Page: ${page}\n\n${config.FOOTER}`
                 },
                 { quoted: mek }
             );
             await new Promise(resolve => setTimeout(resolve, 1200));
         }
 
-        // Pagination buttons (if enabled)
+        // Pagination buttons
         if (config.BUTTON === 'true') {
             let buttons = [];
             if (page > 1) buttons.push({ buttonId: `.img ${query} ${page - 1}`, buttonText: { displayText: "⏮ Prev" }, type: 1 });
