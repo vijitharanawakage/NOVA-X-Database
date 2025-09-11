@@ -46,14 +46,14 @@ cmd({
         }
 
         // Randomly select 5 images
-        const selected = images.sort(() => 0.5 - Math.random()).slice(0, 5);
+        const selected = images.sort(() => 0.5 - Math.random()).slice(0, 10);
 
         for (const imageUrl of selected) {
             await conn.sendMessage(
                 from,
                 {
                     image: { url: imageUrl },
-                    caption: `📷 Result for: *${query}*\n\n${config.FOOTER}`
+                    caption: `📷 𝚁𝙴𝚂𝚄𝙻𝚃 𝙵𝙾𝚁: *${query}*\n\n${config.FOOTER}`
                 },
                 { quoted: mek }
             );
