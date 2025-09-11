@@ -7,23 +7,25 @@ cmd({
     pattern: "img",
     alias: ["image", "googleimage", "searchimg"],
     react: "🦋",
-    desc: "Search and download Google images (HD)",
+    desc: "Search and download Google images with pagination",
     category: "fun",
-    use: ".img <keywords>",
+    use: ".img <keywords> [page]",
     filename: __filename
 }, async (conn, mek, m, { reply, args, from }) => {
     try {
-        const query = args.join(" ");
-        if (!query) {
-            return reply("🖼️ Please provide a search query\nExample: .img cute cats");
+        if (!args.length) {
+            return reply("🖼️ Usage: *.img <query> [page]*\nExample: *.img cute cats 2*");
         }
 
-        await reply(`> 🔍 𝐒ᴇᴀʀᴄʜɪɴɢ 𝐆ᴏᴏɢʟᴇ 𝐈ᴍᴀɢᴇꜱ 𝐅ᴏʀ *${query}* ...`);
+        // query + page
+        const query = args.slice(0, -1).join(" ") || args.join(" ");
+        const pageArg = args[args.length - 1];
+        const page = isNaN(pageArg) ? 1 : parseInt(pageArg);
 
-        // Google image search URL
-        const url = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`;
+        await reply(`> 🔍 Searching Google Images for *${query}* (Page ${page}) ...`);
 
-        // Fetch HTML
+        const url = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}&start=${(page - 1) * 20}`;
+
         const { data } = await axios.get(url, {
             headers: {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
@@ -33,31 +35,55 @@ cmd({
         const $ = cheerio.load(data);
         let images = [];
 
-        // Extract HD image links
+        // Try HD links first
         $("img").each((i, el) => {
-            let imgUrl = $(el).attr("data-iurl") || $(el).attr("data-src") || $(el).attr("src");
-            if (imgUrl && imgUrl.startsWith("http") && !imgUrl.includes("gstatic.com")) {
+            let imgUrl = $(el).attr("data-iurl") || $(el).attr("data-src");
+            if (imgUrl && imgUrl.startsWith("http")) {
                 images.push(imgUrl);
             }
         });
 
+        // Fallback if no HD
         if (images.length === 0) {
-            return reply("❌ No HD images found. Try different keywords.");
+            $("img").each((i, el) => {
+                let fallbackUrl = $(el).attr("src");
+                if (fallbackUrl && fallbackUrl.startsWith("http")) {
+                    images.push(fallbackUrl);
+                }
+            });
         }
 
-        // Randomly select 10 high-quality images
-        const selected = images.sort(() => 0.5 - Math.random()).slice(0, 10);
+        if (images.length === 0) {
+            return reply("❌ No images found. Try again.");
+        }
+
+        // Pick 10 images for current page
+        const selected = images.slice(0, 10);
 
         for (const imageUrl of selected) {
             await conn.sendMessage(
                 from,
                 {
                     image: { url: imageUrl },
-                    caption: `📷 𝙷𝙸𝙶𝙷-𝚀𝚄𝙰𝙻𝙸𝚃𝚈 𝚁𝙴𝚂𝚄𝙻𝚃 𝙵𝙾𝚁: *${query}*\n\n${config.FOOTER}`
+                    caption: `📷 𝚁𝚎𝚜𝚞𝚕𝚝 𝚏𝚘𝚛: *${query}*\n📄 Page: ${page}\n\n${config.FOOTER}`
                 },
                 { quoted: mek }
             );
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            await new Promise(resolve => setTimeout(resolve, 1200));
+        }
+
+        // Pagination buttons (if enabled)
+        if (config.BUTTON === 'true') {
+            let buttons = [];
+            if (page > 1) buttons.push({ buttonId: `.img ${query} ${page - 1}`, buttonText: { displayText: "⏮ Prev" }, type: 1 });
+            buttons.push({ buttonId: `.img ${query} ${page + 1}`, buttonText: { displayText: "⏭ Next" }, type: 1 });
+
+            await conn.sendMessage(from, {
+                text: `🔎 Results for *${query}* - Page ${page}`,
+                footer: config.FOOTER,
+                buttons,
+                headerType: 2
+            }, { quoted: mek });
         }
 
     } catch (error) {
