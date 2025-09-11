@@ -1,97 +1,105 @@
 const { cmd } = require("../lib/command");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const config = require('../settings');
+const config = require("../settings");
 
 cmd({
     pattern: "img",
     alias: ["image", "googleimage", "searchimg"],
     react: "🦋",
-    desc: "Search and download Google images with pagination (HD quality)",
+    desc: "Search and download HD wallpapers",
     category: "fun",
-    use: ".img <keywords> [page]",
-    filename: __filename
+    use: ".img <keyword> [page]",
+    filename: __filename,
 }, async (conn, mek, m, { reply, args, from }) => {
     try {
         if (!args.length) {
-            return reply("🖼️ Usage: *.img <query> [page]*\nExample: *.img cute cats 2*");
+            return reply("🖼️ Usage: `.img <keyword> [page]`\nExample: `.img cars 2`");
         }
 
-        // Query + page
-        const query = args.slice(0, -1).join(" ") || args.join(" ");
-        const pageArg = args[args.length - 1];
-        const page = isNaN(pageArg) ? 1 : parseInt(pageArg);
+        let query = args.slice(0, -1).join(" ") || args.join(" ");
+        let lastArg = args[args.length - 1];
+        let page = isNaN(lastArg) ? 1 : parseInt(lastArg);
 
-        await reply(`> 🔍 Searching *HD Google Images* for *${query}* (Page ${page}) ...`);
+        await reply(`> 🔍 Searching BestHDWallpaper for *${query}* (Page ${page})...`);
 
-        const url = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}&start=${(page - 1) * 20}`;
+        // Search URL
+        let url = `https://www.besthdwallpaper.com/search?q=${encodeURIComponent(query)}&page=${page}`;
 
         const { data } = await axios.get(url, {
-            headers: {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-            }
+            headers: { "User-Agent": "Mozilla/5.0" },
         });
 
         const $ = cheerio.load(data);
-        let images = [];
+        let wallpapers = [];
 
-        // Scrape JSON script block (contains HD image URLs)
-        $("script").each((i, el) => {
-            const scriptContent = $(el).html();
-            if (scriptContent && scriptContent.includes("AF_initDataCallback")) {
-                const matches = scriptContent.match(/"(https?:\/\/[^"]*\.(jpg|png|jpeg))"/g);
-                if (matches) {
-                    matches.forEach(url => {
-                        url = url.replace(/"/g, "");
-                        if (url && url.startsWith("http")) images.push(url);
-                    });
-                }
+        $(".wallpapers .wallpaper-thumb").each((i, el) => {
+            let img = $(el).find("img").attr("src") || $(el).find("img").attr("data-src");
+            let link = $(el).find("a").attr("href");
+            if (img && link) {
+                wallpapers.push({
+                    thumb: img,
+                    link: `https://www.besthdwallpaper.com${link}`,
+                });
             }
         });
 
-        // fallback if no JSON-based URLs
-        if (images.length === 0) {
-            $("img").each((i, el) => {
-                let imgUrl = $(el).attr("data-iurl") || $(el).attr("src");
-                if (imgUrl && imgUrl.startsWith("http")) images.push(imgUrl);
+        if (wallpapers.length === 0) {
+            return reply("❌ No wallpapers found. Try another keyword or page.");
+        }
+
+        // Send 10 results per page
+        for (let i = 0; i < Math.min(10, wallpapers.length); i++) {
+            // Visit wallpaper page to get HD download link
+            let { data: dlPage } = await axios.get(wallpapers[i].link, {
+                headers: { "User-Agent": "Mozilla/5.0" },
             });
-        }
+            let $$ = cheerio.load(dlPage);
+            let hdLink = $$(".wallpaper-resolutions a")
+                .first()
+                .attr("href");
 
-        if (images.length === 0) {
-            return reply("❌ No HD images found. Try again with another keyword.");
-        }
+            if (hdLink) hdLink = "https://www.besthdwallpaper.com" + hdLink;
 
-        // Pick 10 results
-        const selected = images.slice(0, 10);
-
-        for (const imageUrl of selected) {
             await conn.sendMessage(
                 from,
                 {
-                    image: { url: imageUrl },
-                    caption: `📷 *Result for:* ${query}\n📄 Page: ${page}\n\n${config.FOOTER}`
+                    image: { url: wallpapers[i].thumb },
+                    caption: `📷 *Result for:* ${query}\n📄 Page: ${page}\n🔗 [View Wallpaper Page](${wallpapers[i].link})\n📥 [Download HD](${hdLink || wallpapers[i].link})\n\n${config.FOOTER}`,
                 },
                 { quoted: mek }
             );
-            await new Promise(resolve => setTimeout(resolve, 1200));
+            await new Promise((resolve) => setTimeout(resolve, 1500));
         }
 
-        // Pagination buttons
-        if (config.BUTTON === 'true') {
+        // Pagination buttons (if enabled)
+        if (config.BUTTON === "true") {
             let buttons = [];
-            if (page > 1) buttons.push({ buttonId: `.img ${query} ${page - 1}`, buttonText: { displayText: "⏮ Prev" }, type: 1 });
-            buttons.push({ buttonId: `.img ${query} ${page + 1}`, buttonText: { displayText: "⏭ Next" }, type: 1 });
+            if (page > 1)
+                buttons.push({
+                    buttonId: `.img ${query} ${page - 1}`,
+                    buttonText: { displayText: "⏮ Prev" },
+                    type: 1,
+                });
+            buttons.push({
+                buttonId: `.img ${query} ${page + 1}`,
+                buttonText: { displayText: "⏭ Next" },
+                    type: 1,
+            });
 
-            await conn.sendMessage(from, {
-                text: `🔎 Results for *${query}* - Page ${page}`,
-                footer: config.FOOTER,
-                buttons,
-                headerType: 2
-            }, { quoted: mek });
+            await conn.sendMessage(
+                from,
+                {
+                    text: `🔎 Results for *${query}* - Page ${page}`,
+                    footer: config.FOOTER,
+                    buttons,
+                    headerType: 2,
+                },
+                { quoted: mek }
+            );
         }
-
     } catch (error) {
-        console.error("Google Image Error:", error);
-        reply(`❌ Error: ${error.message || "Failed to fetch images"}`);
+        console.error("BestHDWallpaper Error:", error);
+        reply(`❌ Error: ${error.message || "Failed to fetch wallpapers"}`);
     }
 });
