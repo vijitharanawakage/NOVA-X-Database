@@ -18,7 +18,7 @@ cmd({
             return reply("🖼️ Please provide a search query\nExample: .img cute cats");
         }
 
-        await reply(`🔍 Searching Google Images for *${query}* ...`);
+        await reply(`> 🔍 𝐒ᴇᴀʀᴄʜɪɴɢ 𝐆ᴏᴏɢʟᴇ 𝐈ᴍᴀɢᴇꜱ 𝐅ᴏʀ *${query}* ...`);
 
         // Google image search URL
         const url = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`;
@@ -46,7 +46,7 @@ cmd({
         }
 
         // Randomly select 5 images
-        const selected = images.sort(() => 0.5 - Math.random()).slice(0, 10);
+        const selected = images.sort(() => 0.5 - Math.random()).slice(0, 5);
 
         for (const imageUrl of selected) {
             await conn.sendMessage(
