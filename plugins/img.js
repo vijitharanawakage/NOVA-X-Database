@@ -5,9 +5,9 @@ const config = require("../settings");
 
 cmd({
     pattern: "img",
-    alias: ["image", "wallpaper", "searchimg"],
+    alias: ["wallpaper", "besthd", "searchimg"],
     react: "🖼️",
-    desc: "Search BestHDWallpaper and get HD images",
+    desc: "Search BestHDWallpaper for wallpapers",
     category: "fun",
     use: ".img <keyword> [page]",
     filename: __filename
@@ -32,31 +32,25 @@ cmd({
         const $ = cheerio.load(data);
         const wallpapers = [];
 
-        $(".wallpapers .wallpaper-thumb").each((i, el) => {
+        // Updated selector for search results
+        $("div.wallpaper-item").each((i, el) => {
             const thumb = $(el).find("img").attr("data-src") || $(el).find("img").attr("src");
-            const link = $(el).find("a").attr("href");
-            if (thumb && link) {
-                wallpapers.push({
-                    thumb,
-                    pageLink: "https://www.besthdwallpaper.com" + link
-                });
+            const pageLink = $(el).find("a").attr("href");
+            if (thumb && pageLink) {
+                wallpapers.push({ thumb, pageLink: "https://www.besthdwallpaper.com" + pageLink });
             }
         });
 
         if (!wallpapers.length) return reply("❌ No wallpapers found. Try another keyword or page.");
 
-        // Send top 10 results
         for (let i = 0; i < Math.min(10, wallpapers.length); i++) {
-            // Fetch HD link from wallpaper page
             let hdLink = wallpapers[i].pageLink;
             try {
                 const { data: pageData } = await axios.get(hdLink, { headers: { "User-Agent": "Mozilla/5.0" } });
                 const $$ = cheerio.load(pageData);
                 const dlLink = $$("ul.wallpaper-resolutions li a").first().attr("href");
                 if (dlLink) hdLink = "https://www.besthdwallpaper.com" + dlLink;
-            } catch (e) {
-                // fallback
-            }
+            } catch (e) { }
 
             await conn.sendMessage(from, {
                 image: { url: wallpapers[i].thumb },
@@ -66,7 +60,6 @@ cmd({
             await new Promise(res => setTimeout(res, 1200));
         }
 
-        // Pagination buttons
         if (config.BUTTON === "true") {
             const buttons = [];
             if (page > 1) buttons.push({ buttonId: `.img ${query} ${page - 1}`, buttonText: { displayText: "⏮ Prev" }, type: 1 });
