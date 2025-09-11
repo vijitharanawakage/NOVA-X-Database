@@ -7,7 +7,7 @@ cmd({
     pattern: "img",
     alias: ["image", "googleimage", "searchimg"],
     react: "🦋",
-    desc: "Search and download Google images",
+    desc: "Search and download Google images (HD)",
     category: "fun",
     use: ".img <keywords>",
     filename: __filename
@@ -33,31 +33,31 @@ cmd({
         const $ = cheerio.load(data);
         let images = [];
 
-        // Extract image links
+        // Extract HD image links
         $("img").each((i, el) => {
-            const imgUrl = $(el).attr("src");
-            if (imgUrl && imgUrl.startsWith("http")) {
+            let imgUrl = $(el).attr("data-iurl") || $(el).attr("data-src") || $(el).attr("src");
+            if (imgUrl && imgUrl.startsWith("http") && !imgUrl.includes("gstatic.com")) {
                 images.push(imgUrl);
             }
         });
 
         if (images.length === 0) {
-            return reply("❌ No images found. Try different keywords.");
+            return reply("❌ No HD images found. Try different keywords.");
         }
 
-        // Randomly select 5 images
-        const selected = images.sort(() => 0.5 - Math.random()).slice(0, 5);
+        // Randomly select 10 high-quality images
+        const selected = images.sort(() => 0.5 - Math.random()).slice(0, 10);
 
         for (const imageUrl of selected) {
             await conn.sendMessage(
                 from,
                 {
                     image: { url: imageUrl },
-                    caption: `📷 𝚁𝙴𝚂𝚄𝙻𝚃 𝙵𝙾𝚁: *${query}*\n\n${config.FOOTER}`
+                    caption: `📷 𝙷𝙸𝙶𝙷-𝚀𝚄𝙰𝙻𝙸𝚃𝚈 𝚁𝙴𝚂𝚄𝙻𝚃 𝙵𝙾𝚁: *${query}*\n\n${config.FOOTER}`
                 },
                 { quoted: mek }
             );
-            await new Promise(resolve => setTimeout(resolve, 1200));
+            await new Promise(resolve => setTimeout(resolve, 1500));
         }
 
     } catch (error) {
