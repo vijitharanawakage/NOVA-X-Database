@@ -1,5 +1,6 @@
 const { cmd } = require("../lib/command");
 const axios = require("axios");
+const cheerio = require("cheerio");
 const config = require('../settings');
 
 cmd({
@@ -17,37 +18,50 @@ cmd({
             return reply("🖼️ Please provide a search query\nExample: .img cute cats");
         }
 
-        await reply(`🔍 𝐒ᴇᴀʀᴄʜɪɴ𝐆 𝐈ᴍᴀɢᴇ𝐒 𝐅ᴏ𝐑 "${query}"...`);
+        await reply(`🔍 Searching Google Images for *${query}* ...`);
 
-        const url = `https://apis.davidcyriltech.my.id/googleimage?query=${encodeURIComponent(query)}`;
-        const response = await axios.get(url);
+        // Google image search URL
+        const url = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`;
 
-        // Validate response
-        if (!response.data?.success || !response.data.results?.length) {
-            return reply("❌ No images found. Try different keywords");
+        // Fetch HTML
+        const { data } = await axios.get(url, {
+            headers: {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+            }
+        });
+
+        const $ = cheerio.load(data);
+        let images = [];
+
+        // Extract image links
+        $("img").each((i, el) => {
+            const imgUrl = $(el).attr("src");
+            if (imgUrl && imgUrl.startsWith("http")) {
+                images.push(imgUrl);
+            }
+        });
+
+        if (images.length === 0) {
+            return reply("❌ No images found. Try different keywords.");
         }
 
-        const results = response.data.results;
-        // Get 5 random images
-        const selectedImages = results
-            .sort(() => 0.5 - Math.random())
-            .slice(0, 5);
+        // Randomly select 5 images
+        const selected = images.sort(() => 0.5 - Math.random()).slice(0, 5);
 
-        for (const imageUrl of selectedImages) {
+        for (const imageUrl of selected) {
             await conn.sendMessage(
                 from,
-                { 
+                {
                     image: { url: imageUrl },
-                    caption: `📷 𝐑ᴇꜱᴜʟ𝐓 𝐅ᴏ𝐑: ${query}\n\n${config.FOOTER}`
+                    caption: `📷 Result for: *${query}*\n\n${config.FOOTER}`
                 },
                 { quoted: mek }
             );
-            // Add delay between sends to avoid rate limiting
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 1200));
         }
 
     } catch (error) {
-        console.error('Image Search Error:', error);
+        console.error("Google Image Error:", error);
         reply(`❌ Error: ${error.message || "Failed to fetch images"}`);
     }
 });
