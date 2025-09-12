@@ -150,7 +150,7 @@ conn.groupAcceptInvite(inviteCode);
             console.log(' Bot connected ✅')
 	 
 	 // bot connected notification without admin variable
-conn.sendMessage("94761068032@s.whatsapp.net", { text: "```Nova-X Md Started.Command Now...✅```" });
+conn.sendMessage("94761068032@s.whatsapp.net", { text: "*╭────⚃* *SETTINGS* *⚃* \n\n*♾️ AUTO_READ_STATUS:* ➠ " + config.AUTO_READ_STATUS + " \n*♾️ MODE:* ➠ " + config.MODE + " \n*♾️ BOT_NAME:* ➠ " + config.BOT_NAME + " \n*♾️ AUTO_VOICE:* ➠ " + config.AUTO_VOICE + " \n*♾️ AUTO_STICKER:* ➠ " + config.AUTO_STICKER + " \n*♾️ AUTO_REPLY:* ➠ " + config.AUTO_REPLY + " \n*♾️ ALIVE_IMG:* ➠ " + config.ALIVE_IMG + " \n*♾️ ALIVE_MSG:* ➠ " + config.ALIVE_MSG + " \n*♾️ ANTI_LINK:* ➠ " + config.ANTI_LINK + " \n*♾️ PREFIX:* ➠ [" + config.PREFIX + "] \n*♾️ AUTO_RECORDING:* ➠ " + config.FAKE_RECORDING + " \n*♾️ AUTO_TYPING:* ➠ " + config.AUTO_TYPING + " \n*♾️ AUTO_REACT:* ➠ " + config.AUTO_REACT + " \n*♾️ STATUS_REACT:* ➠ " + config.STATUS_REACT + " \n*♾️ OWNER_REACT:* ➠ " + config.OWNER_REACT + " \n*♾️ ANTI_BAD:* ➠ " + config.ANTI_BAD + " \n*╰═════════════⚃*" });
 conn.sendMessage("94741259325@s.whatsapp.net", { text: "```Nova-X Md Started.Command Now...✅```" });
 //================== CONNECT MG ==================
 
