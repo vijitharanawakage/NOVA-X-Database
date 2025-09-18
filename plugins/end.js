@@ -15,7 +15,6 @@ cmd({
 }, async (conn, m, msg, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, args }) => {
   try {
     if (!msg.isGroup) return reply("❌ This command only works in group chats.");
-    if (sender !== conn.user.id) return reply("❌ Only the bot number that deployed this bot can use this command.");
     if (!isAdmin) return reply("❌ You must be *group admin* to use this command.");
     if (!isBotAdmin) return reply("❌ Bot must be *admin* to remove members.");
 
