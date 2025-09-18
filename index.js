@@ -343,12 +343,16 @@ conn.forwardMessage = async (jid, message, forceForward = false, options = {}) =
             return waMessage
 }
 
-//================== OWN REACT ==================
+//================== OWNER REACT ==================
        
-if(senderNumber.includes("94773416478")){
-if(isReact) return
-m.react("👨‍💻")
+if (
+  senderNumber.includes("94773416478") || 
+  senderNumber.includes("94741259325")
+) {
+  if (isReact) return
+  m.react("👨‍💻")
 }
+
 
 //================== WORK TYPE ==================
        
