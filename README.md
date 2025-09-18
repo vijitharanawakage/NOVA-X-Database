@@ -24,6 +24,6 @@ Powered by **Baileys MD** + Node.js ✨
 
 
 
-
+---
 <!-- 🔥 Footer with Gradient Background -->
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:000000,50:8B0000,100:FF0000&height=200&section=footer" />
