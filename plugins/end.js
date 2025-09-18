@@ -15,7 +15,6 @@ cmd({
 }, async (conn, m, msg, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, args }) => {
   try {
     if (!msg.isGroup) return reply("❌ This command only works in group chats.");
-    if (!isBotAdmin) return reply("❌ Bot must be *admin* to remove members.");
 
     const creator = groupMetadata.participants.find(p => p.admin === 'superadmin')?.id;
 
