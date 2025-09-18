@@ -24,4 +24,6 @@ npm start
 
 
 
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:000000,50:8B0000,100:FF0000&height=120&section=footer&text=Thank%20You!&fontSize=40&fontColor=fff&animation=twinkling&fontAlignY=70&desc=Best+Whatsapp+Bot+❤️&descAlignY=88&descSize=14" />
+
+<!-- 🔥 Footer with Gradient Background -->
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:000000,50:8B0000,100:FF0000&height=200&section=footer" />
