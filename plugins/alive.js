@@ -21,6 +21,26 @@ END:VCARD`
     }
   }
 };
+
+// 🔢 Convert numbers to emoji digits
+function numberToEmoji(str) {
+    const nums = {
+        "0": "0️⃣",
+        "1": "1️⃣",
+        "2": "2️⃣",
+        "3": "3️⃣",
+        "4": "4️⃣",
+        "5": "5️⃣",
+        "6": "6️⃣",
+        "7": "7️⃣",
+        "8": "8️⃣",
+        "9": "9️⃣",
+        "-": "➖",
+        ":": "⏸️"
+    };
+    return str.split("").map(c => nums[c] || c).join("");
+}
+
 cmd({
     pattern: "alive",
     alias: ["status", "online", "bot"],
@@ -32,18 +52,22 @@ cmd({
     try {
         // 🕒 Sri Lanka Time
         const hour = moment().tz("Asia/Colombo").hour();
-        const date = moment().tz("Asia/Colombo").format("YYYY-MM-DD");  // 📅 Date
-        const time = moment().tz("Asia/Colombo").format("HH:mm:ss");   // ⏰ Time
+        const date = moment().tz("Asia/Colombo").format("YYYY-MM-DD");  
+        const time = moment().tz("Asia/Colombo").format("HH:mm:ss");   
+
+        // 👉 Convert to emoji format
+        const emojiDate = numberToEmoji(date);
+        const emojiTime = numberToEmoji(time);
 
         let greeting;
         if (hour >= 0 && hour < 12) {
             greeting = "*┇ Ｇ𝙾𝙾𝙳 爪𝙾𝚁𝙽𝙸𝙽𝙶 🌞 ┇*";
         } else if (hour >= 12 && hour < 15) {
-            greeting = "*┇ Ｇ𝙾𝙾𝙳 Ａ𝙵𝚃𝙴𝚁𝙽𝙾𝙾𝙽 ☀️ ┇*";
+            greeting = "*┇ Ｇ𝙾𝙾𝙳 Ａ𝙵𝚃𝙴𝚁𝙽𝙾𝙾Ｎ ☀️ ┇*";
         } else if (hour >= 15 && hour < 18) {
-            greeting = "*┇ Ｇ𝙾𝙾𝙳 乇𝚅𝙴𝙽𝙸𝙽𝙶 🌇 ┇*";
+            greeting = "*┇ Ｇ𝙾𝙾𝙳 乇𝚅𝙴𝙽𝙸𝙽𝙂 🌇 ┇*";
         } else {
-            greeting = "*┇ Ｇ𝙾𝙾𝙳 Ｎ𝙸𝙶𝙷𝚃 🌙 ┇*";
+            greeting = "*┇ Ｇ𝙾𝙾𝙳 Ｎ𝙸𝙶Ｈ𝚃 🌙 ┇*";
         }
 
         // Random English quotes/messages
@@ -106,8 +130,8 @@ ${config.ALIVE_MSG}
 *╰──────────●●►*
 
 *╭─「 ᴅᴀᴛᴇ & ᴛɪᴍᴇ 」*
-*│*📅 *Ｄᴀᴛᴇ*: ${date}
-*│*⏰ *Ｔɪᴍᴇ*: ${time}
+*│*📅 *Ｄᴀᴛᴇ*: ${emojiDate}
+*│*⏰ *Ｔɪᴍᴇ*: ${emojiTime}
 *╰──────────●●►*
 
 *╭──「 ɪɴꜰᴏ 」*
@@ -134,7 +158,7 @@ ${config.FOOTER}`;
             }
         ];
 
-        // 2️⃣ Send image + status in separate message
+        // 2️⃣ Send image + status
         await conn.sendMessage(from, {
             buttons,
             headerType: 1,
