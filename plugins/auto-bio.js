@@ -15,7 +15,22 @@ const lifeQuotes = [
   "😊 Happiness comes from your own actions.",
   "🖤 Always King In The Game.",
   "😏 I am the Artist Who Paints My Life.",
-  "☸ I Am Believe In Karma."
+  "☸ I Am Believe In Karma.",
+  "⚡ I don’t wait for opportunities, I create them.",
+  "🎯 Focus on goals, not obstacles.",
+  "🌹 Silence is better than unnecessary drama.",
+  "👑 Born to express, not to impress.",
+  "🔥 Hustle in silence, let success make the noise.",
+  "🌈 Every day is a new beginning, take a deep breath and start again.",
+  "🦅 Fly high, no limits.",
+  "💎 Pressure creates diamonds, never give up.",
+  "🌊 Go with the flow but never forget your goals.",
+  "☠️ I fear none, I respect all.",
+  "⚔️ Warriors are not born, they are built.",
+  "📌 Success is not for the lazy.",
+  "🕊️ Peace over everything.",
+  "🌍 Be the reason someone smiles today.",
+  "🔥 Pain changes people, but it also makes them stronger."
 ];
 
 let bioUpdateInterval = null;
