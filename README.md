@@ -17,10 +17,10 @@ Powered by **Baileys MD** + Node.js ✨
 ---
 ## ⚡ Installation
 ```bash
-git clone https://github.com/YourUser/QUEEN-JUSMY-MD.git
-cd QUEEN-JUSMY-MD
-npm install
-npm start
+- git clone https://github.com/YourUser/QUEEN-JUSMY-MD.git
+- cd QUEEN-JUSMY-MD
+- npm install
+- npm start
 
 
 
