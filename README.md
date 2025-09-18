@@ -21,3 +21,12 @@ git clone https://github.com/YourUser/QUEEN-JUSMY-MD.git
 cd QUEEN-JUSMY-MD
 npm install
 npm start
+
+<!-- Footer -->
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:000000,50:8B0000,100:FF0000&height=120&section=footer&text=Thank%20You!&fontSize=40&fontColor=fff&animation=twinkling&fontAlignY=70&desc=Best+Whatsapp+Bot+❤️&descAlignY=88&descSize=14" />
+  <p><b>© 2025 QUEEN JUSMY-MD V1 | Made with 💝by MR Pathum  Malsara &  {....]</b></p>
+</div>
+
+</div>
+
