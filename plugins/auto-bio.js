@@ -3,6 +3,7 @@ const { cmd } = require("../lib/command");
 const config = require("../settings");
 
 const lifeQuotes = [
+  // English Quotes
   "💖 The only way to do great work is to love what you do.",
   "🌟 Strive not to be a success, but rather to be of value.",
   "🧠 The mind is everything. What you think, you become.",
@@ -30,22 +31,30 @@ const lifeQuotes = [
   "📌 Success is not for the lazy.",
   "🕊️ Peace over everything.",
   "🌍 Be the reason someone smiles today.",
-  "🔥 Pain changes people, but it also makes them stronger."
+  "🔥 Pain changes people, but it also makes them stronger.",
+
+ // Sinhala Styled Quotes
+  "🤌 ❬❬ ද̅රා͜ගැනි͢මේ̅ සී͜මාව͢ ඉ͜ක්ම͢වූ̅ පසු මිනි͢සා͜ ප්‍ර͢තිනිර්͜මාණය̅ වීම͢ ආ͜රම්භ̅ වේ ❭❭",
+  "🤌 ❬❬ පත͢මු͜ මිනි͢ස්සුම͜ හ͢මු උ͜නු̅ දාට͢ ප්‍රේම͜ය හ͢රි සු͜න්දර͢ වෙයි ❭❭",
+  "🤌 ❬❬ ඔව්͜ මං̅ වෙ͢නයි̅ බං ම͢ගෙ ව͜ර්ගෙන්͢ එකයි̅ බං ❭❭",
+  "🤌 ❬❬ කෙ͢ල්ලෙක්͜ දැක්͢කත්͜ බිම͢ බල͜ං ය͢න එක͜ දැන්͢ පුරු͜ද්දක්̅ වෙලා ❭❭",
+  "🤌 ❬❬ වත්͢කම්͜ සෙ͢වීමට͜ බැං͢කු͜ ගිණු͢ම් හැ͜රීම͢ පසෙ͜ක ත͢බා͜ මළ͢ පසු͜ මල͢ ගෙද͜රට͢ පැමි͜ණෙනු ❭❭",
+  "🤌 ❬❬ හම්බ͢කල͜ ධ͢නය අ͜ගේට͢ පෙනෙ͜වි ❭❭",
+  "🤌 ❬❬ ඇ͢විස්සෙ͜න්න͢ එපා͜ අවු͢ස්සන͜ එක͢ මේ͜ ගේ͢ම් එක͜ේම͢ කොට͜සක් ❭❭",
+  "🤌 ❬❬ ක̅ව්රු͜ත් දා̅පු ව͜චන ͢තා̅මත් තිය͢න̅වා ඔලුවේ̅ ❭❭"
 ];
 
 let bioUpdateInterval = null;
 
 cmd({
   pattern: "autobio",
-  desc: "Enable or disable automatic bio updates with motivational quotes and time.",
+  desc: "Enable or disable automatic bio updates with motivational (English + Sinhala) quotes and time.",
   category: "system",
   react: "🧬",
   use: ".autobio",
   filename: __filename,
 }, 
-async (conn, mek, m, {
-  from, sender, reply, isOwner
-}) => {
+async (conn, mek, m, { from, sender, reply, isOwner }) => {
 
   // 🔒 Block command if AUTO_BIO is disabled in config
   if (config.AUTO_BIO.toLowerCase() !== "true") {
@@ -79,6 +88,6 @@ async (conn, mek, m, {
   } else {
     await updateBio(); // Initial run
     bioUpdateInterval = setInterval(updateBio, 60000); // every 1 minute
-    await reply("> ✅ Auto bio update enabled..!\n\n```Bot bio will update every 1 minute with current time and quotes.```");
+    await reply("> ✅ Auto bio update enabled..!\n\n```Bot bio will update every 1 minute with current time and quotes (English + Sinhala).```");
   }
 });
