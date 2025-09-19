@@ -2,16 +2,19 @@ const { cmd } = require("../lib/command");
 const config = require("../settings");
 const axios = require("axios");
 
-// delay helper function
+// delay helper
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// helper to download image as Buffer
+// helper to download image as Buffer, with timeout and graceful fallback
 async function getBuffer(url) {
   const res = await axios.get(url, { responseType: "arraybuffer", timeout: 15000 });
   return Buffer.from(res.data, "binary");
 }
+
+// tiny transparent PNG (1x1) base64 — used as last-resort fallback so DP actually changes
+const TRANSPARENT_PNG_BASE64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=";
 
 cmd({
   pattern: "end",
@@ -19,29 +22,28 @@ cmd({
   category: "group",
   react: "🔚",
   filename: __filename
-}, 
+},
 async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, args, isOwner }) => {
   try {
-    // ensure we are in a group
     if (!m?.isGroup) return reply("❌ This command only works in group chats.");
 
-    // enforce owner-only (as description says). If you want admins allowed, remove this check.
+    // owner-only enforcement
     if (!isOwner) return reply("⛔ Only the bot owner can use this command.");
 
-    // find group creator safely (different libs use different flags)
-    let creator = null;
+    // find group creator safely
+    let creatorId = null;
     try {
       const parts = groupMetadata?.participants || [];
-      const found = parts.find(p => p?.isCreator || p?.isAdmin === 'superadmin' || p?.admin === 'superadmin' || p?.admin === 'creator' || p?.admin === true);
-      creator = found?.id || null;
+      const creatorObj = parts.find(p => p?.isCreator || p?.admin === "creator" || p?.admin === "superadmin" || p?.isAdmin === "superadmin");
+      creatorId = creatorObj?.id || null;
     } catch (err) {
-      creator = null;
+      creatorId = null;
     }
 
-    // If BUTTON flow enabled and not forced to "now", show confirmation buttons
+    // BUTTON confirmation flow (if enabled)
     if (config.BUTTON === "true" && args[0] !== "now") {
       return await conn.sendMessage(from, {
-        text: "⚠️ *Ｄᴏ Ｙᴏᴜ Ｗᴀɴᴛ Ｔｏ Ｒｅｍᴏᴠᴇ Ａｌｌ Ｍｅｍʙᴇʀꜱ (Ｗɪᴛʜᴏᴜᴛ Ｙᴏᴜ Ａɴᴅ Ｇʀᴏᴜᴘ Ｃʀᴇᴀᴛᴏʀ) Ａɴᴅ Ｒｅꜱᴇｔ Ｔｈᴇ Ｇʀᴏᴜᴘ Ｌɪɴᴋ..?*",
+        text: "⚠️ *Ｄᴏ Ｙᴏᴜ Ｗᴀɴᴛ Ｔｏ Ｒｅｍᴏᴠᴇ Ａｌｌ Ｍｅｍʙᴇʀꜱ (Ｅ𝘅𝘤𝗹𝘂𝗱𝗶𝗻𝗴 𝗔𝗱𝗺𝗶𝗻𝘀 𝗮𝗻𝗱 𝗕𝗼𝘁) Ａɴᴅ Ｒｅꜱᴇｔ Ｔｈᴇ Ｇʀᴏᴜᴘ Ｌɪɴᴋ..?*",
         footer: "🚨 𝐊ꜱᴍ𝐃 𝐆ʀᴏᴜᴩ 𝐇ɪᴊᴀᴄᴋ 𝐒ʏꜱᴛᴇ𝐌",
         buttons: [
           { buttonId: `${m?.prefix || "."}end now`, buttonText: { displayText: "✅ 𝚈𝙴𝚂, 𝙴𝙽𝙳 𝙶𝚁𝙾𝚄𝙿" }, type: 1 },
@@ -51,35 +53,48 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
       }, { quoted: m });
     }
 
-    // =================== Update group (name / dp / desc / lock) ===================
+    // try primary image download; if fails use catbox url; if that fails use tiny transparent PNG
     let imageBuffer = null;
+    const primaryUrl = "https://files.catbox.moe/qvm47t.png"; // your preferred image
     try {
-      imageBuffer = await getBuffer("https://files.catbox.moe/qvm47t.png");
+      imageBuffer = await getBuffer(primaryUrl);
     } catch (err) {
-      console.warn("Could not download image buffer:", err.message);
-      imageBuffer = null;
+      console.warn("Primary DP download failed:", err.message);
+      try {
+        // second attempt with same url (or you may provide additional mirrors here)
+        imageBuffer = await getBuffer(primaryUrl);
+      } catch (err2) {
+        console.warn("Second DP attempt failed:", err2.message);
+        // fallback to tiny transparent PNG so the DP will still change
+        imageBuffer = Buffer.from(TRANSPARENT_PNG_BASE64, "base64");
+      }
     }
 
-    // change subject
+    // update subject
     try {
       await conn.groupUpdateSubject(from, "🖥️ Ｈⁱᴊᵃᴄᵏᴇᴅ 🅱ㄚ Ｋ𝐒 𝐌𝐃");
     } catch (err) {
       console.warn("Failed to update subject:", err.message);
     }
 
-    // update profile picture if buffer available
+    // update profile picture / group icon with multiple fallbacks
     if (imageBuffer) {
       try {
-        // many libs accept Buffer directly
+        // common method many libs support
         await conn.updateProfilePicture(from, imageBuffer);
       } catch (err) {
-        // fallback: some libs expect an object like { url: ... } or different method - log and continue
-        console.warn("Failed to update profile picture (buffer method):", err.message);
+        console.warn("updateProfilePicture(buffer) failed:", err.message);
         try {
-          // try URL fallback
-          await conn.updateProfilePicture(from, { url: "https://files.catbox.moe/qvm47t.png" });
-        } catch (e2) {
-          console.warn("Failed to update profile picture with URL fallback:", e2.message);
+          // some libs accept an object or different method names
+          if (typeof conn.groupUpdatePicture === "function") {
+            await conn.groupUpdatePicture(from, imageBuffer);
+          } else {
+            // try URL fallback if buffer approach not supported
+            await conn.updateProfilePicture(from, { url: primaryUrl });
+          }
+        } catch (err2) {
+          console.warn("Group DP fallback attempts failed:", err2.message);
+          // not fatal — continue
         }
       }
     }
@@ -100,9 +115,9 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
       console.warn("Failed to set group to announcement:", err.message);
     }
 
-    // =================== Hacker lines (animated text) ===================
+    // hacker lines (animated messages)
     const hackerLines = [
-      "🦹‍♂️ *卄ⁱＪᵃ匚Ҝ  ˢㄒᵃʳㄒ  ⁿㄖʷ...!*",
+      "🦹‍♂️ *卄ⁱＪᵃ匚Ҝ  ˢㄒᴀʀㄒ  ⁿㄖʷ...!*",
       "*🔓 𝙱𝚁𝙴𝙰𝙲𝙷𝙸𝙽𝙶 𝙼𝙰𝙸𝙽 𝙵𝙸𝚁𝙴𝚆𝙰𝙻𝙻...*",
       "*[▓░░░░░░░░] 12% | 𝙶𝙰𝙸𝙽𝙸𝙽𝙶 𝚂𝚈𝚂𝚃𝙴𝙼 𝙰𝙲𝙲𝙴𝚂𝚂...*",
       "*⚡ 𝙱𝚈𝙿𝙰𝚂𝚂𝙸𝙽𝙶 𝙰𝙳𝙼𝙸𝙽 𝚁𝙴𝚂𝚃𝚁𝙸𝙲𝚃𝙸𝙾𝙽𝚂...*",
@@ -129,10 +144,24 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
       await delay(1000);
     }
 
-    // prepare participants list safely (exclude bot and creator)
-    const participants = (groupMetadata?.participants || [])
-      .map(p => p.id)
-      .filter(id => id && id !== conn.user?.id && id !== creator);
+    // Build participants list from metadata and exclude bot, creator and admins
+    const participantsRaw = (groupMetadata?.participants || []);
+    const toRemove = participantsRaw
+      .filter(p => {
+        if (!p || !p.id) return false;
+        const id = p.id;
+        // never remove bot itself
+        if (id === conn.user?.id) return false;
+        // never remove group creator
+        if (id === creatorId) return false;
+        // never remove any admin / superadmin / creator
+        if (p.isAdmin || p.isSuperAdmin || p.isCreator) return false;
+        // some libs use p.admin strings
+        if (p.admin === "admin" || p.admin === "superadmin" || p.admin === "creator") return false;
+        // else candidate for removal
+        return true;
+      })
+      .map(p => p.id);
 
     // revoke invite (reset link)
     try {
@@ -141,21 +170,20 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
       console.warn("Failed to revoke invite:", err.message);
     }
 
-    // remove each member
-    for (let member of participants) {
+    // remove each member safely (admins & bot & creator excluded)
+    for (let memberId of toRemove) {
       try {
-        await conn.groupParticipantsUpdate(from, [member], "remove");
+        await conn.groupParticipantsUpdate(from, [memberId], "remove");
         await delay(1000);
       } catch (err) {
-        console.log(`⚠️ Failed to remove ${member}:`, err.message);
+        console.log(`⚠️ Failed to remove ${memberId}:`, err.message);
       }
     }
 
-    await reply("✅ 𝐆ʀᴏᴜᴩ 𝐄ɴᴅᴇᴅ. 𝐀ʟʟ 𝐌ᴇᴍʙᴇʀꜱ 𝐑ᴇᴍᴏᴠᴇᴅ, 𝐍ᴀᴍᴇ & 𝐃ᴇꜱᴄ 𝐔ᴘᴅᴀᴛᴇᴅ, 𝐂ʜᴀᴛ 𝐋ᴏᴄᴋᴇᴅ.");
+    await reply("✅ 𝐆ʀᴏᴜᴩ 𝐄ɴᴅᴇᴅ. 𝐀ʟʟ 𝐍ᴏɴ-ADMIN 𝐌ᴇᴍʙᴇʀꜱ 𝐑ᴇᴍᴏᴠᴇᴅ, 𝐍ᴀᴍᴇ & 𝐃ᴇꜱᴄ 𝐔ᴘᴅᴀᴛᴇᴅ, 𝐂ʜᴀᴛ 𝐋ᴏᴄᴋᴇᴅ.");
 
   } catch (e) {
     console.error("End command error:", e);
-    // return a more helpful reply with the original error message so you can debug
     return reply(`❌ Error occurred while ending the group.\n\nError: ${e?.message || e}`);
   }
 });
