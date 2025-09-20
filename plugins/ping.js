@@ -13,7 +13,7 @@ async (conn, mek, m) => {
   let start = performance.now()
 
   // send temporary message
-  let sentMsg = await conn.sendMessage(m.chat, { text: "🏓 𝙿𝙸𝙽𝙶𝙸𝙽𝙶 𝙽𝙾𝚅𝙰-𝚇..." }, { quoted: mek })
+  let sentMsg = await conn.sendMessage(m.chat, { text: "🏓 𝙿𝙸𝙽𝙶𝙸𝙽𝙶 < | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️..." }, { quoted: mek })
 
   // end timer
   let end = performance.now()
@@ -21,6 +21,6 @@ async (conn, mek, m) => {
 
   // edit message with ping result
   await conn.sendMessage(m.chat, { 
-    text: `*𝐏𝐎𝐍𝐆 🏓*\n\n📡 ʀᴇꜱᴘᴏɴꜱᴇ ᴛɪᴍᴇ: \`${ping} ᴍꜱ\`` 
+    text: `*𝐏𝐎𝐍𝐆 🏓*\n\n📡 ʀᴇꜱᴘᴏɴꜱᴇ ꜱᴘᴇᴇᴅ: \`${ping} ᴍꜱ\`` 
   }, { quoted: mek })
 })
