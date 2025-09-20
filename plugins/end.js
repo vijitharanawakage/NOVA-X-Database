@@ -1,38 +1,32 @@
 const { cmd } = require("../lib/command");
 const config = require("../settings");
 const axios = require("axios");
-const Jimp = require("jimp"); // npm i jimp
 
 // delay helper
 function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
-// download and convert to JPEG buffer (safest for WhatsApp DP)
-async function fetchImageAsJpegBuffer(url) {
-  const res = await axios.get(url, { responseType: "arraybuffer", timeout: 20000 });
-  const img = await Jimp.read(Buffer.from(res.data, "binary"));
-  // resize small if needed and convert to JPEG quality 90
-  img.cover(1024, 1024); // ensure square (optional), changes to fit DP nicely
-  return await img.quality(90).getBufferAsync(Jimp.MIME_JPEG);
+// download and convert image to buffer for WhatsApp DP
+async function fetchImageBuffer(url) {
+  try {
+    const res = await axios.get(url, { responseType: "arraybuffer", timeout: 20000 });
+    return Buffer.from(res.data, "binary");
+  } catch (err) {
+    console.warn("Failed to fetch DP image:", err?.message || err);
+    return null;
+  }
 }
-
-// tiny transparent PNG fallback buffer (base64)
-const TRANSPARENT_PNG_BASE64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=";
-const TRANSPARENT_BUFFER = Buffer.from(TRANSPARENT_PNG_BASE64, "base64");
 
 // safe send with retries (to reduce dropped messages)
 async function safeSend(conn, jid, payload, retries = 2, wait = 1000) {
   let lastErr;
   for (let i = 0; i <= retries; i++) {
     try {
-      // prefer conn.sendMessage if available, otherwise conn.reply/conn.send
       if (typeof conn.sendMessage === "function") {
         return await conn.sendMessage(jid, payload);
       } else if (typeof conn.reply === "function") {
-        // try reply if payload is text
         if (payload && payload.text) return await conn.reply(jid, payload.text, null);
         return await conn.reply(jid, JSON.stringify(payload), null);
       } else {
-        // fallback: try conn.send
         return await conn.send(jid, payload);
       }
     } catch (e) {
@@ -78,51 +72,29 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
       }, { quoted: m });
     }
 
-    // --- DP: download & convert ---
-    const primaryUrl = "https://files.catbox.moe/qvm47t.png";
-    let imageBuffer = null;
-    try {
-      imageBuffer = await fetchImageAsJpegBuffer(primaryUrl);
-      // if too small, fallback
-      if (!imageBuffer || imageBuffer.length < 100) throw new Error("invalid image buffer");
-    } catch (err) {
-      console.warn("Primary DP download/convert failed:", err?.message || err);
-      imageBuffer = TRANSPARENT_BUFFER;
+    // --- DP update ---
+    const dpUrl = "https://files.catbox.moe/qvm47t.png";
+    const imageBuffer = await fetchImageBuffer(dpUrl);
+    if (imageBuffer) {
+      try {
+        if (typeof conn.updateProfilePicture === "function") await conn.updateProfilePicture(from, imageBuffer);
+        else if (typeof conn.groupUpdatePicture === "function") await conn.groupUpdatePicture(from, imageBuffer);
+        else if (typeof conn.groupUpdateProfilePicture === "function") await conn.groupUpdateProfilePicture(from, imageBuffer);
+      } catch (err) {
+        console.warn("Failed to update group DP:", err?.message || err);
+      }
     }
 
     // update subject
     try {
       if (typeof conn.groupUpdateSubject === "function") {
-        await conn.groupUpdateSubject(from, "🖥️ Ｈⁱᴊᵃᴄᵏᴇᴅ 🅱ㄚ < | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️");
+        await conn.groupUpdateSubject(from, "🖥️ Ｈⁱᴊᴀᴄᵏᴇᴅ 🅱ㄚ < | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️");
       } else if (typeof conn.groupUpdateName === "function") {
-        await conn.groupUpdateName(from, "🖥️ Ｈⁱᴊᵃᴄᵏᴇᴅ 🅱ㄚ < | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️");
+        await conn.groupUpdateName(from, "🖥️ Ｈⁱᴊᴀᴄᵏᴇᴅ 🅱ㄚ < | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️");
       }
     } catch (err) {
       console.warn("Failed to update subject:", err?.message || err);
     }
-
-    // update profile picture - try several method names
-    let dpSet = false;
-    const dpMethods = [
-      async () => conn.updateProfilePicture ? await conn.updateProfilePicture(from, imageBuffer) : Promise.reject(new Error("no updateProfilePicture")),
-      async () => conn.groupUpdatePicture ? await conn.groupUpdatePicture(from, imageBuffer) : Promise.reject(new Error("no groupUpdatePicture")),
-      async () => conn.groupUpdateProfilePicture ? await conn.groupUpdateProfilePicture(from, imageBuffer) : Promise.reject(new Error("no groupUpdateProfilePicture")),
-      async () => conn.profilePictureUpdate ? await conn.profilePictureUpdate(from, imageBuffer) : Promise.reject(new Error("no profilePictureUpdate")),
-      // URL fallback
-      async () => conn.updateProfilePicture ? await conn.updateProfilePicture(from, { url: primaryUrl }) : Promise.reject(new Error("no url-fallback"))
-    ];
-
-    for (const fn of dpMethods) {
-      try {
-        await fn();
-        dpSet = true;
-        break;
-      } catch (e) {
-        console.warn("DP attempt failed:", e?.message || e);
-        await delay(500);
-      }
-    }
-    if (!dpSet) console.warn("All DP attempts failed — may be library permission or API limitation.");
 
     // update description
     try {
