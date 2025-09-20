@@ -12,10 +12,10 @@ const qMessage = {
   },
   message: {
     contactMessage: {
-      displayName: "𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃",
+      displayName: "< | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️",
       vcard: `BEGIN:VCARD
 VERSION:3.0
-FN:𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃
+FN:< | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️
 TEL:+94741259325
 END:VCARD`
     }
@@ -35,8 +35,7 @@ function numberToEmoji(str) {
         "7": "7️⃣",
         "8": "8️⃣",
         "9": "9️⃣",
-        "-": "➖",
-        ":": "⏸️"
+        "-": "➖"
     };
     return str.split("").map(c => nums[c] || c).join("");
 }
