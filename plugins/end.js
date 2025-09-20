@@ -84,18 +84,18 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
     }
 
     // ✅ change group profile picture
-    try {
-      const imageUrl = "https://files.catbox.moe/qvm47t.png"; // your image link
-      const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
-      const imageBuffer = Buffer.from(response.data, "binary");
+try {
+  const imageUrl = "https://files.catbox.moe/qvm47t.png";
+  const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
+  const imageBuffer = Buffer.from(response.data, "binary");
 
-      if (typeof conn.updateProfilePicture === "function") {
-        await conn.updateProfilePicture(from, imageBuffer); // direct buffer method
-        console.log("✅ Group profile picture updated!");
-      }
-    } catch (err) {
-      console.warn("Failed to update group profile picture:", err?.message || err);
-    }
+  if (typeof conn.updateProfilePicture === "function") {
+    await conn.updateProfilePicture(from, { url: imageBuffer }); // correct baileys-mod structure
+    console.log("✅ Group profile picture updated!");
+  }
+} catch (err) {
+  console.warn("Failed to update group profile picture:", err?.message || err);
+}
 
     // lock chat (announcement)
     try {
