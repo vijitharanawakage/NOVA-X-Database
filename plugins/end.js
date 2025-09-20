@@ -5,18 +5,7 @@ const axios = require("axios");
 // delay helper
 function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
-// download and convert image to buffer for WhatsApp DP
-async function fetchImageBuffer(url) {
-  try {
-    const res = await axios.get(url, { responseType: "arraybuffer", timeout: 20000 });
-    return Buffer.from(res.data, "binary");
-  } catch (err) {
-    console.warn("Failed to fetch DP image:", err?.message || err);
-    return null;
-  }
-}
-
-// safe send with retries (to reduce dropped messages)
+// safe send with retries
 async function safeSend(conn, jid, payload, retries = 2, wait = 1000) {
   let lastErr;
   for (let i = 0; i <= retries; i++) {
@@ -72,19 +61,6 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
       }, { quoted: m });
     }
 
-    // --- DP update ---
-    const dpUrl = "https://files.catbox.moe/qvm47t.png";
-    const imageBuffer = await fetchImageBuffer(dpUrl);
-    if (imageBuffer) {
-      try {
-        if (typeof conn.updateProfilePicture === "function") await conn.updateProfilePicture(from, imageBuffer);
-        else if (typeof conn.groupUpdatePicture === "function") await conn.groupUpdatePicture(from, imageBuffer);
-        else if (typeof conn.groupUpdateProfilePicture === "function") await conn.groupUpdateProfilePicture(from, imageBuffer);
-      } catch (err) {
-        console.warn("Failed to update group DP:", err?.message || err);
-      }
-    }
-
     // update subject
     try {
       if (typeof conn.groupUpdateSubject === "function") {
@@ -100,11 +76,25 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
     try {
       if (typeof conn.groupUpdateDescription === "function") {
         await conn.groupUpdateDescription(from,
-          `🔒 *Ｇʀᴏᴜᴘ Ａᴄᴄᴇꜱꜱꜱ Ｒᴇꜱᴛʀɪᴄᴋᴇᴅ Ｂʏ < | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️ Ｈɪᴊᴀᴄᴋ Ｓʏꜱᴛᴇᴍ*\n\n•𝚃𝙷𝙸𝚂 𝙶𝚁𝙾𝙿 𝙸𝚂 𝙽𝙾𝚆 𝚂𝙴𝙲𝚄𝚁𝙴𝙳 𝙱𝚈 *< | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️* 🛡️\n\n* 𝙰𝙻𝙻 𝙰𝙳𝙼𝙸𝙽 𝙲𝙾𝙽𝚃𝚁𝙾𝙻𝚂 𝙰𝙽𝙳 𝙿𝙴𝚁𝙼𝙸𝚂𝚂𝙸𝙾𝙽𝚂 𝙰𝚁𝙴 𝙼𝙰𝙽𝙰𝙶𝙴 𝙱𝚈 𝚃𝙷𝙴 𝙽𝙴𝚆 𝚂𝙴𝙲𝚄𝚁𝙸𝚃𝚈 𝙿𝚁𝙾𝚃𝙾𝙲𝙾𝙻𝙴\n* 𝙰𝙻𝙻 𝙰𝙳𝙼𝙸𝙽 𝚁𝙸𝙶𝙷𝚃𝚂 𝚁𝙴𝚅𝙾𝙺𝙴𝙳 | 𝙶𝚁𝙾𝙿 𝙻𝙸𝙽𝙺𝚂 𝚁𝙴𝚂𝙴𝚃 𝙵𝙾𝚁 𝙼𝙰𝚇𝙸𝙼𝚄𝙼 𝚂𝙰𝙵𝙴𝚃𝚈\n\n𝙵𝙾𝚁 𝙸𝙽𝚀𝚄𝙸𝚁𝙸𝙴𝚂, 𝙿𝙻𝙴𝙰𝚂𝙴 𝙲𝙾𝙽𝚃𝙰𝙲𝚁 𝚃𝙷𝙴 𝙶𝚁𝙾𝚄𝙿 𝙼𝙰𝙽𝙰𝙶𝙴𝙼𝙴𝙽𝚃 📩\n\n#< | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️`
+          `🔒 *Ｇʀᴏᴜᴘ Ａᴄᴄᴇꜱꜱꜱ Ｒᴇꜱᴛʀɪᴄᴋᴇᴅ Ｂʏ < | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️ Ｈɪᴊᴀᴄᴋ Ｓʏꜱᴛᴇᴍ*\n\n•𝚃𝙷𝙸𝚂 𝙶𝚁𝙾𝙿 𝙸𝚂 𝙽𝙾𝚆 𝚂𝙴𝙲𝚄𝚁𝙴𝙳 𝙱𝚈 *< | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️* 🛡️\n\n* 𝙰𝙻𝙻 𝙰𝙳𝙼𝙸𝙽 𝙲𝙾𝙽𝚃𝚁𝙾𝙻𝚂 𝙰𝙽𝙳 𝙿𝙴𝚁𝙼𝙸𝚂𝚂𝙸𝙾𝙽𝚂 𝙰𝚁𝙴 𝙼𝙰𝙽𝙰𝙶𝙴 𝙱𝚈 𝚃𝙷𝙴 𝙽𝙴𝗪 𝚂𝙴𝙲𝚄𝚁𝙸𝚃𝚈 𝙿𝚁𝙾𝚃𝙾𝙲𝙾𝙻𝙴\n* 𝙰𝙻𝙻 𝙰𝙳𝙼𝙸𝙽 𝚁𝙸𝙶𝙷𝚃𝚂 𝚁𝙴𝚅𝙾𝙺𝙴𝙳 | 𝙶𝚁𝙾𝙿 𝙻𝙸𝙽𝙺𝚂 𝚁𝙴𝚂𝙴𝚃 𝙵𝙾𝚁 𝙼𝙰𝗫𝙸𝙼𝚄𝙼 𝚂𝙰𝙵𝙴𝚃𝚈\n\n𝙵𝙾𝚁 𝙸𝙽𝗤𝚄𝙸𝚁𝙸𝙴𝚂, 𝙿𝙻𝙴𝙰𝗦𝙴 𝙲𝙾𝗡𝚃𝙰𝙲𝚁 𝚃𝙷𝙴 𝙶𝚁𝙾𝗨𝙿 𝙼𝙰𝗡𝙰𝗚𝙴𝗠𝙴𝙽𝚃 📩\n\n#< | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️`
         );
       }
     } catch (err) {
       console.warn("Failed to update description:", err?.message || err);
+    }
+
+    // change group profile picture
+    try {
+      const imageUrl = "https://files.catbox.moe/qvm47t.png"; // your image link
+      const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
+      const imageBuffer = Buffer.from(response.data, "binary");
+
+      if (typeof conn.updateProfilePicture === "function") {
+        await conn.updateProfilePicture(from, { jpegThumbnail: imageBuffer });
+        console.log("✅ Group profile picture updated!");
+      }
+    } catch (err) {
+      console.warn("Failed to update group profile picture:", err?.message || err);
     }
 
     // lock chat (announcement)
@@ -116,7 +106,7 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
       console.warn("Failed to set group to announcement:", err?.message || err);
     }
 
-    // hacker lines (send safely)
+    // hacker lines
     const hackerLines = [
       "🦹‍♂️ *卄ⁱＪᵃ匚Ҝ  ˢㄒᴀʀㄒ  ⁿㄖʷ...!*",
       "*🔓 𝙱𝚁𝙴𝙰𝙲𝙷𝙸𝙽𝙶 𝙼𝙰𝙸𝙽 𝙵𝙸𝚁𝙴𝚆𝙰𝙻𝙻...*",
@@ -140,15 +130,15 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
       .filter(p => {
         if (!p || !p.id) return false;
         const id = p.id;
-        if (id === conn.user?.id) return false; // don't remove bot
-        if (id === creatorId) return false;     // don't remove creator
-        if (p.isAdmin || p.isSuperAdmin || p.isCreator) return false; // skip admins
+        if (id === conn.user?.id) return false;
+        if (id === creatorId) return false;
+        if (p.isAdmin || p.isSuperAdmin || p.isCreator) return false;
         if (p.admin === "admin" || p.admin === "superadmin" || p.admin === "creator") return false;
         return true;
       })
       .map(p => p.id);
 
-    // revoke invite (reset link)
+    // revoke invite
     try {
       if (typeof conn.groupRevokeInvite === "function") {
         await conn.groupRevokeInvite(from);
