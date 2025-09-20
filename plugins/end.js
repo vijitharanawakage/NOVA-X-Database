@@ -68,8 +68,8 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
     // BUTTON confirmation flow
     if (config.BUTTON === "true" && args[0] !== "now") {
       return await conn.sendMessage(from, {
-        text: "⚠️ *Ｄᴏ Ｙᴏᴜ Ｗᴀɴᴛ Ｔｏ Ｒｅᴍᴏᴠᴇ Ａｌｌ Ｍｅｍʙᴇʀꜱ (Ｅ𝘅𝘤𝗹𝘂𝗱𝗶𝗻𝗴 𝗔𝗱𝗺𝗶𝗻𝘀 𝗮𝗻𝗱 𝗕𝗼𝘁) Ａɴᴅ Ｒｅꜱᴇｔ Ｔｈᴇ Ｇʀᴏᴜᴘ Ｌɪɴᴋ..?*",
-        footer: "🚨 𝐊ꜱᴍ𝐃 𝐆ʀᴏᴜᴩ 𝐇ɪᴊᴀᴄᴋ 𝐒ʏꜱᴛᴇ𝐌",
+        text: "⚠️ *𝐃ᴏ 𝐘ᴏᴜ 𝐖ᴀɴᴛ 𝐓ᴏ 𝐑ᴇᴍᴏᴠᴇ 𝐀ʟʟ 𝐌ᴇᴍʙᴇʀꜱ (ᴡɪᴛʜᴏᴜᴛ ʏᴏᴜ ᴀɴᴅ ᴀᴅᴍɪɴꜱ) 𝐀ɴᴅ 𝐑ᴇꜱᴇᴛ 𝐓ʜᴇ 𝐆ʀᴏᴜᴘ 𝐋ɪɴᴋ..?*",
+        footer: "🚨 < | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️ 𝐆ʀᴏᴜᴩ 𝐇ɪᴊᴀᴄᴋ 𝐒ʏꜱᴛᴇ𝐌",
         buttons: [
           { buttonId: `${m?.prefix || "."}end now`, buttonText: { displayText: "✅ 𝚈𝙴𝚂, 𝙴𝙽𝙳 𝙶𝚁𝙾𝚄𝙿" }, type: 1 },
           { buttonId: `${m?.prefix || "."}cancel`, buttonText: { displayText: "❌ 𝙲𝙰𝙽𝙲𝙴𝙻 𝙶𝚁𝙾𝚄𝙿 𝙴𝙽𝙳" }, type: 1 }
@@ -93,9 +93,9 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
     // update subject
     try {
       if (typeof conn.groupUpdateSubject === "function") {
-        await conn.groupUpdateSubject(from, "🖥️ Ｈⁱᴊᵃᴄᵏᴇᴅ 🅱ㄚ Ｋ𝐒 𝐌𝐃");
+        await conn.groupUpdateSubject(from, "🖥️ Ｈⁱᴊᵃᴄᵏᴇᴅ 🅱ㄚ < | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️");
       } else if (typeof conn.groupUpdateName === "function") {
-        await conn.groupUpdateName(from, "🖥️ Ｈⁱᴊᵃᴄᵏᴇᴅ 🅱ㄚ Ｋ𝐒 𝐌𝐃");
+        await conn.groupUpdateName(from, "🖥️ Ｈⁱᴊᵃᴄᵏᴇᴅ 🅱ㄚ < | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️");
       }
     } catch (err) {
       console.warn("Failed to update subject:", err?.message || err);
@@ -128,7 +128,7 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
     try {
       if (typeof conn.groupUpdateDescription === "function") {
         await conn.groupUpdateDescription(from,
-          `🔒 *Group Access Restricted By King-Sandesh-Md-Hijack-System*\n\n•This group is now secured by *KING-SANDESH-MD-V2* 🛡️\n\n* All admin controls and permissions are managed by the new security protocol\n* Previous admin rights revoked | Group links reset for maximum safety\n\nFor inquiries, please contact the group management 📩\n\n#KING-SANDESH-MD-V2`
+          `🔒 *Ｇʀᴏᴜᴘ Ａᴄᴄᴇꜱꜱꜱ Ｒᴇꜱᴛʀɪᴄᴋᴇᴅ Ｂʏ < | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️ Ｈɪᴊᴀᴄᴋ Ｓʏꜱᴛᴇᴍ*\n\n•𝚃𝙷𝙸𝚂 𝙶𝚁𝙾𝙿 𝙸𝚂 𝙽𝙾𝚆 𝚂𝙴𝙲𝚄𝚁𝙴𝙳 𝙱𝚈 *< | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️* 🛡️\n\n* 𝙰𝙻𝙻 𝙰𝙳𝙼𝙸𝙽 𝙲𝙾𝙽𝚃𝚁𝙾𝙻𝚂 𝙰𝙽𝙳 𝙿𝙴𝚁𝙼𝙸𝚂𝚂𝙸𝙾𝙽𝚂 𝙰𝚁𝙴 𝙼𝙰𝙽𝙰𝙶𝙴 𝙱𝚈 𝚃𝙷𝙴 𝙽𝙴𝚆 𝚂𝙴𝙲𝚄𝚁𝙸𝚃𝚈 𝙿𝚁𝙾𝚃𝙾𝙲𝙾𝙻𝙴\n* 𝙰𝙻𝙻 𝙰𝙳𝙼𝙸𝙽 𝚁𝙸𝙶𝙷𝚃𝚂 𝚁𝙴𝚅𝙾𝙺𝙴𝙳 | 𝙶𝚁𝙾𝙿 𝙻𝙸𝙽𝙺𝚂 𝚁𝙴𝚂𝙴𝚃 𝙵𝙾𝚁 𝙼𝙰𝚇𝙸𝙼𝚄𝙼 𝚂𝙰𝙵𝙴𝚃𝚈\n\n𝙵𝙾𝚁 𝙸𝙽𝚀𝚄𝙸𝚁𝙸𝙴𝚂, 𝙿𝙻𝙴𝙰𝚂𝙴 𝙲𝙾𝙽𝚃𝙰𝙲𝚁 𝚃𝙷𝙴 𝙶𝚁𝙾𝚄𝙿 𝙼𝙰𝙽𝙰𝙶𝙴𝙼𝙴𝙽𝚃 📩\n\n#< | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️`
         );
       }
     } catch (err) {
@@ -199,7 +199,7 @@ async (conn, mek, m, { isAdmin, isBotAdmin, groupMetadata, sender, from, reply, 
 
     // final confirmation
     try {
-      await safeSend(conn, from, { text: "✅ 𝐆ʀᴏᴜᴩ 𝐄ɴᴅᴇᴅ. 𝐀ʟʟ 𝐍ᴏɴ-ADMIN 𝐌ᴇᴍʙᴇʀꜱ 𝐑ᴇᴍᴏᴠᴇᴅ, 𝐍ᴀᴍᴇ & 𝐃ᴇꜱᴄ 𝐔ᴘᴅᴀᴛᴇᴅ, 𝐂ʜᴀᴛ 𝐋ᴏᴄᴋᴇᴅ." }, 2, 800);
+      await safeSend(conn, from, { text: "✅ 𝐆ʀᴏᴜᴩ 𝐄ɴᴅᴇᴅ 𝐒ᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ. 𝐀ʟʟ 𝐍ᴏɴ-𝐀ᴅᴍɪɴ 𝐌ᴇᴍʙᴇʀꜱ 𝐑ᴇᴍᴏᴠᴇᴅ, 𝐍ᴀᴍᴇ & 𝐃ᴇꜱᴄ 𝐔ᴘᴅᴀᴛᴇᴅ, 𝐂ʜᴀᴛ 𝐋ᴏᴄᴋᴇᴅ." }, 2, 800);
     } catch (err) {
       console.warn("Final confirmation failed:", err?.message || err);
       return reply("✅ Operation completed (some notifications may not have delivered).");
