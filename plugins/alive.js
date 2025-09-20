@@ -64,9 +64,9 @@ cmd({
         } else if (hour >= 12 && hour < 15) {
             greeting = "*┇ Ｇ𝙾𝙾𝙳 Ａ𝙵𝚃𝙴𝚁𝙽𝙾𝙾Ｎ ☀️ ┇*";
         } else if (hour >= 15 && hour < 18) {
-            greeting = "*┇ Ｇ𝙾𝙾𝙳 乇𝚅𝙴𝙽𝙸𝙽𝙂 🌇 ┇*";
+            greeting = "*┇ Ｇ𝙾𝙾𝙳 乇𝚅𝙴𝙽𝙸𝙽Ｇ 🌇 ┇*";
         } else {
-            greeting = "*┇ Ｇ𝙾𝙾𝙳 Ｎ𝙸𝙶Ｈ𝚃 🌙 ┇*";
+            greeting = "*┇ Ｇ𝙾𝙾𝙳 Ｎ𝙸𝙶𝙷Ｔ 🌙 ┇*";
         }
 
         // Random English quotes/messages
@@ -172,7 +172,7 @@ ${config.FOOTER}`;
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {
                     newsletterJid: '120363409414874042@newsletter',
-                    newsletterName: '𝐍ｏ𝐕𝐀-ｘ Ｍ𝐃',
+                    newsletterName: '< | 𝐐ᴜᴇᴇɴ 𝐉ᴜꜱᴍʏ 𝐌ᴅ 🧚‍♀️',
                     serverMessageId: 143
                 }
             }
